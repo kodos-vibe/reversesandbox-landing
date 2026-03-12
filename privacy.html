@@ -83,12 +83,12 @@ footer{border-top:1px solid var(--border);padding:32px 0}
     <p>Because our primary users are AI agents, not humans, most data we collect is technical in nature:</p>
     <ul>
       <li><strong>API Request Logs</strong> — endpoint called, timestamp, HTTP status code, response time, and approximate request size. These logs do not contain the content of API responses.</li>
-      <li><strong>Wallet Addresses</strong> — the on-chain wallet address used to initiate an x402 payment. This is public blockchain data, not personal data in the traditional sense.</li>
+      <li><strong>Account Identifiers</strong> — access credentials or identifiers used to authenticate API requests. These are technical identifiers, not personal data in the traditional sense.</li>
       <li><strong>Usage Metrics</strong> — aggregated request counts per endpoint and time period, used for capacity planning and billing verification.</li>
       <li><strong>Contact Information</strong> — if you email us or register as an API provider, we store your email address and any information you voluntarily provide.</li>
       <li><strong>Server Logs</strong> — standard web server logs including IP addresses and user-agent strings, retained for security and abuse prevention.</li>
     </ul>
-    <p>We do not require accounts, usernames, or passwords for API consumers. We do not collect payment card numbers — all payments are cryptocurrency transactions on the Base blockchain.</p>
+    <p>We do not require accounts, usernames, or passwords for API consumers. We do not collect or store payment card numbers — payment processing is handled by third-party processors.</p>
 
     <h2>3. How We Use This Information</h2>
     <ul>
@@ -109,13 +109,13 @@ footer{border-top:1px solid var(--border);padding:32px 0}
     <h2>5. Sharing and Disclosure</h2>
     <p>We do not sell, rent, or trade personal data. We may share information in these limited circumstances:</p>
     <ul>
-      <li><strong>API Providers</strong> — aggregated usage statistics for requests to their specific API (no wallet addresses or IP addresses).</li>
+      <li><strong>API Providers</strong> — aggregated usage statistics for requests to their specific API (no account identifiers or IP addresses).</li>
       <li><strong>Service Providers</strong> — infrastructure and hosting vendors who process data on our behalf, subject to confidentiality obligations.</li>
       <li><strong>Legal Requirements</strong> — if required by law, court order, or to protect the rights, property, or safety of Reverse Sandbox LLC or others.</li>
     </ul>
 
-    <h2>6. Blockchain Data</h2>
-    <p>Payments made through the x402 protocol are recorded on the Base blockchain, which is a public ledger. Wallet addresses, transaction amounts, and timestamps are permanently visible to anyone on the blockchain. This is an inherent property of public blockchain technology and outside our control. We do not link on-chain wallet addresses to real-world identities.</p>
+    <h2>6. Payment Data</h2>
+    <p>Payment transactions are processed by third-party payment processors. We receive confirmation of successful payment and usage logs (amount, timestamp, endpoint) but do not store full payment instrument details. We do not link payment records to real-world identities beyond what is necessary for billing verification.</p>
 
     <h2>7. Cookies and Tracking</h2>
     <p>Our informational website (reversesandbox.com) uses minimal session cookies for basic functionality. We do not use tracking pixels, advertising cookies, or third-party analytics scripts. The API gateway (search.reversesandbox.com) is a programmatic interface and does not set cookies.</p>
@@ -162,7 +162,7 @@ footer{border-top:1px solid var(--border);padding:32px 0}
         <span class="footer-contact-item">We typically respond within 24 hours</span>
       </div>
     </div>
-    <div class="footer-security">Payments processed via x402 protocol on Base blockchain. No card data stored. Payments accepted in USDC (USD Coin).</div>
+    <div class="footer-security">Payments processed securely via third-party payment processors · No card data stored on our servers · Usage-based billing in USD</div>
     <div class="footer-copy">© 2026 REVERSE SANDBOX LLC · Enabling the agent economy</div>
   </div>
 </footer>
