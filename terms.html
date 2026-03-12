@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service — ReverseSandbox</title>
+<meta name="description" content="Terms of Service for ReverseSandbox — the API marketplace for AI agents.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--border:#2a2a3a;--text:#e4e4ef;--text2:#8888a0;--accent:#8b5cf6;--accent2:#a78bfa;--green:#34d399;--orange:#f59e0b;--blue:#60a5fa;--code-bg:#0d0d14;--glow:rgba(139,92,246,0.15)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+code,pre{font-family:'JetBrains Mono',monospace}
+.container{max-width:1080px;margin:0 auto;padding:0 24px}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 0}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-weight:700;font-size:1.1rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.9rem;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-links .cta-link{display:flex;align-items:center;gap:6px;background:var(--surface2);padding:6px 14px;border-radius:8px;border:1px solid var(--border);font-weight:500;color:var(--text)}
+.nav-links .cta-link:hover{border-color:var(--accent);color:var(--accent2)}
+
+.policy-page{padding:120px 0 80px;max-width:720px;margin:0 auto}
+.policy-page h1{font-size:clamp(1.8rem,3vw,2.4rem);font-weight:700;margin-bottom:8px;letter-spacing:-0.02em}
+.policy-page .meta{color:var(--text2);font-size:.85rem;margin-bottom:48px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.policy-page h2{font-size:1.1rem;font-weight:600;margin:36px 0 12px;color:var(--accent2)}
+.policy-page p{color:var(--text2);font-size:.95rem;line-height:1.7;margin-bottom:14px}
+.policy-page ul{color:var(--text2);font-size:.95rem;line-height:1.7;margin:0 0 16px 24px}
+.policy-page ul li{margin-bottom:6px}
+.policy-page a{color:var(--accent2);text-decoration:none}
+.policy-page a:hover{text-decoration:underline}
+
+footer{border-top:1px solid var(--border);padding:32px 0}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo{font-weight:700;font-size:1rem;color:var(--text)}
+.footer-logo span{color:var(--accent)}
+.footer-links{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:.85rem;transition:color .2s}
+.footer-links a:hover{color:var(--accent2)}
+.footer-contact{width:100%;display:flex;gap:32px;flex-wrap:wrap;padding-top:16px;border-top:1px solid var(--border);margin-top:8px}
+.footer-contact-item{font-size:.85rem;color:var(--text2)}
+.footer-contact-item a{color:var(--accent2);text-decoration:none}
+.footer-contact-item a:hover{text-decoration:underline}
+.footer-copy{color:var(--text2);font-size:.8rem;width:100%;text-align:center;margin-top:8px;padding-top:16px;border-top:1px solid var(--border)}
+.footer-security{width:100%;text-align:center;font-size:.78rem;color:var(--text2);margin-top:4px;opacity:.7}
+
+@media(max-width:640px){.policy-page{padding:100px 0 60px}.footer-inner{flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="/" class="nav-logo"><span>Reverse</span>Sandbox</a>
+    <div class="nav-links">
+      <a href="/#problem">Why</a>
+      <a href="/#services">Services</a>
+      <a href="mailto:contact@reversesandbox.com" class="cta-link">Contact →</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="policy-page">
+    <h1>Terms of Service</h1>
+    <p class="meta">ReverseSandbox LLC &nbsp;·&nbsp; Effective: March 13, 2026 &nbsp;·&nbsp; Questions: <a href="mailto:contact@reversesandbox.com">contact@reversesandbox.com</a></p>
+
+    <h2>1. About ReverseSandbox</h2>
+    <p>ReverseSandbox LLC ("ReverseSandbox", "we", "us") operates an API marketplace that enables AI agents and automated software clients to discover, access, and pay for third-party API services using the x402 micropayment protocol (USDC stablecoin on the Base blockchain). By accessing or using our services you agree to these Terms.</p>
+
+    <h2>2. Services Provided</h2>
+    <p>ReverseSandbox provides:</p>
+    <ul>
+      <li><strong>API Gateway Services</strong> — proxying and routing requests from API consumers (including AI agents) to upstream API providers, with payment verification at the protocol layer.</li>
+      <li><strong>First-Party APIs</strong> — Web Search, Web Scraping, and Screenshot APIs operated by ReverseSandbox and accessible at search.reversesandbox.com.</li>
+      <li><strong>Provider Listing</strong> — allowing third-party API providers to register their services in the ReverseSandbox catalog for discovery by agents.</li>
+    </ul>
+    <p>Services are provided on an "as-is" basis. Availability, pricing, and features may change at any time with or without notice.</p>
+
+    <h2>3. Payment Terms</h2>
+    <p>All payments on ReverseSandbox are made in <strong>USDC (USD Coin)</strong>, a USD-pegged stablecoin, on the <strong>Base blockchain</strong> via the <strong>x402 micropayment protocol</strong>. Key terms:</p>
+    <ul>
+      <li>Payments are per-request, settled on-chain before your request is fulfilled.</li>
+      <li>Current prices are denominated in USD equivalent (e.g., $0.002 USD per search query, $0.005 USD per scrape, $0.002 USD per screenshot). Prices are set in USDC at the time of each request.</li>
+      <li>There are no subscriptions, monthly fees, or minimum commitments.</li>
+      <li>By sending a payment transaction you authorize the on-chain transfer. Transactions are irreversible once confirmed on the Base blockchain.</li>
+      <li>ReverseSandbox is not a money transmitter. Payments flow directly between consumer and provider wallets via smart contracts.</li>
+    </ul>
+
+    <h2>4. Refunds and Fulfillment</h2>
+    <p>API calls are <strong>digital goods delivered instantly</strong> at the time of the on-chain payment. Because delivery is simultaneous with payment and the blockchain transaction is irreversible, <strong>no refunds are issued for successfully fulfilled API calls</strong>.</p>
+    <p>Refunds may be considered at our sole discretion in cases of documented technical failure on our end (e.g., our service was down and your request was never processed). See our <a href="/refund.html">Fulfillment &amp; Refund Policy</a> for the request process.</p>
+
+    <h2>5. Acceptable Use</h2>
+    <p>You agree not to use ReverseSandbox to:</p>
+    <ul>
+      <li>Violate any applicable law or regulation.</li>
+      <li>Scrape, abuse, or overload upstream services in ways that violate their terms of service.</li>
+      <li>Conduct denial-of-service attacks, credential stuffing, or any activity designed to harm third parties.</li>
+      <li>Circumvent rate limits, payment requirements, or access controls.</li>
+      <li>Resell access to our services without prior written authorization.</li>
+      <li>Use the service for any purpose that is illegal, harmful, or in violation of applicable export control laws.</li>
+    </ul>
+    <p>We reserve the right to suspend or terminate access for any violation of these terms without notice or refund.</p>
+
+    <h2>6. Export and Legal Restrictions</h2>
+    <p>ReverseSandbox is operated from the United States. You represent that you are not located in, or a national of, any country subject to U.S. embargo or sanctions (including Cuba, Iran, North Korea, Russia, Syria, or the Crimea region), and that you are not on any U.S. government restricted-party list. Use of the service in violation of U.S. export control laws is strictly prohibited.</p>
+
+    <h2>7. API Provider Terms</h2>
+    <p>If you register your API as a provider on ReverseSandbox:</p>
+    <ul>
+      <li>You retain full ownership of your API and its content.</li>
+      <li>You grant ReverseSandbox permission to proxy, route, and describe your API to consumers in our catalog.</li>
+      <li>You are responsible for the accuracy of your service description and pricing.</li>
+      <li>You must comply with the acceptable use policy above with respect to your upstream data sources.</li>
+      <li>ReverseSandbox takes a platform fee (specified at registration) from each successful transaction.</li>
+    </ul>
+
+    <h2>8. Intellectual Property</h2>
+    <p>ReverseSandbox and its logos, trademarks, and site content are owned by ReverseSandbox LLC. API responses returned through the gateway belong to their respective providers and are subject to each provider's licensing terms. You do not acquire any rights to ReverseSandbox's intellectual property by using our service.</p>
+
+    <h2>9. Account Termination</h2>
+    <p>We may suspend or terminate your access at any time for violation of these Terms, suspected fraud or abuse, or at our discretion. Because payments are on-chain and per-request, there is no account balance to return upon termination. Termination of provider accounts will be communicated via the registered contact email with reasonable notice except in cases of immediate abuse.</p>
+
+    <h2>10. Disclaimers</h2>
+    <p>THE SERVICE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED. REVERSESANDBOX DOES NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, ERROR-FREE, OR THAT RESULTS WILL BE ACCURATE OR COMPLETE. YOUR USE OF THE SERVICE IS AT YOUR OWN RISK.</p>
+
+    <h2>11. Limitation of Liability</h2>
+    <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, REVERSESANDBOX LLC AND ITS OFFICERS, DIRECTORS, AND EMPLOYEES SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR FOR LOSS OF PROFITS, DATA, OR BUSINESS OPPORTUNITIES, ARISING OUT OF OR IN CONNECTION WITH THESE TERMS OR YOUR USE OF THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. OUR AGGREGATE LIABILITY FOR ALL CLAIMS SHALL NOT EXCEED THE GREATER OF (A) USD $50 OR (B) AMOUNTS PAID BY YOU IN THE 30 DAYS PRECEDING THE CLAIM.</p>
+
+    <h2>12. Governing Law</h2>
+    <p>These Terms are governed by the laws of the United States and the State of Delaware, without regard to conflict-of-law principles. Any dispute shall be resolved through binding arbitration under the AAA Commercial Arbitration Rules, except that either party may seek injunctive relief in a court of competent jurisdiction.</p>
+
+    <h2>13. Changes to These Terms</h2>
+    <p>We may update these Terms from time to time. Continued use of the service after posting of updated Terms constitutes acceptance. Material changes will be announced at reversesandbox.com or via email to registered providers.</p>
+
+    <h2>14. Contact</h2>
+    <p>ReverseSandbox LLC<br>
+    [Address], United States<br>
+    Email: <a href="mailto:contact@reversesandbox.com">contact@reversesandbox.com</a></p>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo"><span>Reverse</span>Sandbox</div>
+      <div class="footer-links">
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/refund.html">Refund Policy</a>
+        <a href="https://search.reversesandbox.com">Search API</a>
+        <a href="mailto:contact@reversesandbox.com">Contact</a>
+      </div>
+      <div class="footer-contact">
+        <span class="footer-contact-item">Email: <a href="mailto:contact@reversesandbox.com">contact@reversesandbox.com</a></span>
+        <span class="footer-contact-item">We typically respond within 24 hours</span>
+      </div>
+    </div>
+    <div class="footer-security">Payments processed via x402 protocol on Base blockchain. No card data stored. Payments accepted in USDC (USD Coin).</div>
+    <div class="footer-copy">© 2026 ReverseSandbox LLC · Enabling the agent economy</div>
+  </div>
+</footer>
+
+</body>
+</html>
