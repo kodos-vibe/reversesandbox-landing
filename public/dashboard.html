@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — ReverseSandbox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--border:#2a2a3a;--text:#e4e4ef;--text2:#8888a0;--accent:#8b5cf6;--accent2:#a78bfa;--green:#34d399;--orange:#f59e0b;--blue:#60a5fa;--red:#f87171;--code-bg:#0d0d14;--glow:rgba(139,92,246,0.15)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+code,pre{font-family:'JetBrains Mono',monospace}
+.container{max-width:1080px;margin:0 auto;padding:0 24px}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 0}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-weight:700;font-size:1.1rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.9rem;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+
+.dash{padding:100px 0 60px}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px}
+.dash-header h1{font-size:1.6rem;font-weight:700;letter-spacing:-0.02em}
+.dash-header h1 .name{color:var(--accent2)}
+.balance-display{text-align:right}
+.balance-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);margin-bottom:4px}
+.balance-amount{font-size:2rem;font-weight:700;color:var(--green);font-family:'JetBrains Mono',monospace}
+
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:28px}
+.card h2{font-size:1rem;font-weight:600;color:var(--accent2);margin-bottom:16px;text-transform:uppercase;letter-spacing:.06em;font-size:.8rem}
+
+/* Add Funds */
+.amount-presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.amount-btn{padding:10px 20px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:.9rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:'JetBrains Mono',monospace}
+.amount-btn:hover,.amount-btn.active{border-color:var(--accent);color:var(--accent2);background:var(--glow)}
+.custom-amount{display:flex;gap:8px;margin-bottom:16px;align-items:center}
+.custom-amount label{color:var(--text2);font-size:.85rem;white-space:nowrap}
+.custom-amount input{flex:1;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:var(--code-bg);color:var(--text);font-size:.9rem;font-family:'JetBrains Mono',monospace;outline:none}
+.custom-amount input:focus{border-color:var(--accent)}
+.checkout-btn{width:100%;padding:12px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .2s}
+.checkout-btn:hover{background:var(--accent2);transform:translateY(-1px)}
+.checkout-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.checkout-msg{margin-top:12px;font-size:.85rem;text-align:center;min-height:20px}
+.checkout-msg.error{color:var(--red)}
+.checkout-msg.success{color:var(--green)}
+
+/* Profile Card */
+.profile-row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:.9rem}
+.profile-row:last-child{border-bottom:none}
+.profile-row .label{color:var(--text2)}
+.profile-row .value{color:var(--text);font-weight:500}
+
+/* Activity Feed */
+.activity-card{grid-column:1/-1}
+.activity-list{display:flex;flex-direction:column;gap:0}
+.activity-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.activity-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.activity-icon.login{background:rgba(96,165,250,0.15);color:var(--blue)}
+.activity-icon.registration{background:rgba(139,92,246,0.15);color:var(--accent2)}
+.activity-icon.payment{background:rgba(52,211,153,0.15);color:var(--green)}
+.activity-icon.logout{background:rgba(136,136,160,0.15);color:var(--text2)}
+.activity-icon.credit{background:rgba(52,211,153,0.15);color:var(--green)}
+.activity-desc{flex:1;font-size:.9rem;color:var(--text)}
+.activity-time{font-size:.8rem;color:var(--text2);white-space:nowrap}
+.activity-empty{text-align:center;padding:32px;color:var(--text2);font-size:.9rem}
+.load-more{text-align:center;padding-top:16px}
+.load-more button{padding:8px 24px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:.85rem;cursor:pointer;transition:all .2s}
+.load-more button:hover{border-color:var(--accent);color:var(--accent2)}
+
+.toast{position:fixed;top:80px;right:24px;padding:14px 24px;border-radius:10px;font-size:.9rem;font-weight:500;z-index:200;opacity:0;transform:translateY(-10px);transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.success{background:rgba(52,211,153,0.15);border:1px solid rgba(52,211,153,0.4);color:var(--green)}
+.toast.error{background:rgba(248,113,113,0.15);border:1px solid rgba(248,113,113,0.4);color:var(--red)}
+
+.loading{text-align:center;padding:40px;color:var(--text2)}
+
+@media(max-width:640px){.dash-grid{grid-template-columns:1fr}.dash-header{flex-direction:column;text-align:center}.balance-display{text-align:center}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="/" class="nav-logo"><span>Reverse</span>Sandbox LLC</a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/dashboard" style="color:var(--accent2)">Dashboard</a>
+      <a href="/logout">Sign Out</a>
+    </div>
+  </div>
+</nav>
+
+<div id="toast" class="toast"></div>
+
+<section class="dash">
+  <div class="container">
+    <div id="loading" class="loading">Loading your dashboard...</div>
+    <div id="dashboard-content" style="display:none">
+      <div class="dash-header">
+        <h1>Welcome back, <span class="name" id="user-name"></span></h1>
+        <div class="balance-display">
+          <div class="balance-label">Account Balance</div>
+          <div class="balance-amount" id="user-balance">$0.00</div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <div class="card">
+          <h2>Add Funds</h2>
+          <div class="amount-presets">
+            <button class="amount-btn" data-amount="500">$5</button>
+            <button class="amount-btn" data-amount="1000">$10</button>
+            <button class="amount-btn active" data-amount="2500">$25</button>
+            <button class="amount-btn" data-amount="5000">$50</button>
+          </div>
+          <div class="custom-amount">
+            <label>Custom:</label>
+            <input type="number" id="custom-amount" min="1" max="500" step="1" placeholder="Enter amount in $">
+          </div>
+          <button class="checkout-btn" id="checkout-btn">Continue to Payment</button>
+          <div class="checkout-msg" id="checkout-msg"></div>
+        </div>
+
+        <div class="card">
+          <h2>Profile</h2>
+          <div class="profile-row"><span class="label">Name</span><span class="value" id="profile-name">—</span></div>
+          <div class="profile-row"><span class="label">Email</span><span class="value" id="profile-email">—</span></div>
+          <div class="profile-row"><span class="label">Member since</span><span class="value" id="profile-created">—</span></div>
+          <div class="profile-row"><span class="label">Last login</span><span class="value" id="profile-login">—</span></div>
+        </div>
+
+        <div class="card activity-card">
+          <h2>Activity</h2>
+          <div class="activity-list" id="activity-list">
+            <div class="activity-empty">No activity yet</div>
+          </div>
+          <div class="load-more" id="load-more" style="display:none">
+            <button id="load-more-btn">Load more</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  let selectedAmount = 2500; // default $25
+  let activityOffset = 0;
+  const ACTIVITY_LIMIT = 20;
+
+  // Toast
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + type + ' show';
+    setTimeout(() => t.classList.remove('show'), 4000);
+  }
+
+  // Check URL params for payment status
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('payment') === 'success') {
+    setTimeout(() => showToast('Payment successful! Your balance has been updated.', 'success'), 500);
+    history.replaceState(null, '', '/dashboard');
+  } else if (params.get('payment') === 'cancelled') {
+    setTimeout(() => showToast('Payment was cancelled.', 'error'), 500);
+    history.replaceState(null, '', '/dashboard');
+  }
+
+  // Format date
+  function fmtDate(d) {
+    if (!d) return '—';
+    const date = new Date(d + 'Z');
+    return date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+  }
+  function fmtTime(d) {
+    if (!d) return '';
+    const date = new Date(d + 'Z');
+    const now = new Date();
+    const diff = now - date;
+    if (diff < 60000) return 'just now';
+    if (diff < 3600000) return Math.floor(diff/60000) + 'm ago';
+    if (diff < 86400000) return Math.floor(diff/3600000) + 'h ago';
+    if (diff < 604800000) return Math.floor(diff/86400000) + 'd ago';
+    return fmtDate(d);
+  }
+
+  // Format balance (cents → dollars)
+  function fmtBalance(cents) {
+    return '$' + (cents / 100).toFixed(2);
+  }
+
+  // Event type display
+  const eventMeta = {
+    registration: { icon: '★', label: 'Account created', cls: 'registration' },
+    login:        { icon: '→', label: 'Signed in', cls: 'login' },
+    logout:       { icon: '←', label: 'Signed out', cls: 'logout' },
+    payment:      { icon: '$', label: 'Payment received', cls: 'payment' },
+    credit:       { icon: '+', label: 'Credit added', cls: 'credit' },
+  };
+
+  // Load user data
+  fetch('/api/me')
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById('loading').style.display = 'none';
+      if (!data.authenticated) {
+        window.location.href = '/login';
+        return;
+      }
+      const u = data.user;
+      document.getElementById('dashboard-content').style.display = 'block';
+      document.getElementById('user-name').textContent = u.name || u.email;
+      document.getElementById('user-balance').textContent = fmtBalance(u.balance);
+      document.getElementById('profile-name').textContent = u.name || '—';
+      document.getElementById('profile-email').textContent = u.email;
+      document.getElementById('profile-created').textContent = fmtDate(u.created_at);
+      document.getElementById('profile-login').textContent = fmtDate(u.last_login_at);
+      loadActivity();
+    })
+    .catch(() => {
+      document.getElementById('loading').textContent = 'Failed to load dashboard. Please try again.';
+    });
+
+  // Load activity
+  function loadActivity(append) {
+    fetch('/api/activity?limit=' + ACTIVITY_LIMIT + '&offset=' + activityOffset)
+      .then(r => r.json())
+      .then(data => {
+        const list = document.getElementById('activity-list');
+        if (!append) list.innerHTML = '';
+        if (!data.activity || data.activity.length === 0) {
+          if (!append) list.innerHTML = '<div class="activity-empty">No activity yet</div>';
+          document.getElementById('load-more').style.display = 'none';
+          return;
+        }
+        data.activity.forEach(item => {
+          const meta = eventMeta[item.event_type] || { icon: '·', label: item.event_type, cls: '' };
+          let desc = meta.label;
+          try {
+            const md = JSON.parse(item.metadata || '{}');
+            if (item.event_type === 'payment' && md.amount_cents) {
+              desc += ' — ' + fmtBalance(md.amount_cents);
+            }
+          } catch(e) {}
+          const el = document.createElement('div');
+          el.className = 'activity-item';
+          el.innerHTML = '<div class="activity-icon ' + meta.cls + '">' + meta.icon + '</div>'
+            + '<div class="activity-desc">' + desc + '</div>'
+            + '<div class="activity-time">' + fmtTime(item.created_at) + '</div>';
+          list.appendChild(el);
+        });
+        document.getElementById('load-more').style.display =
+          data.activity.length >= ACTIVITY_LIMIT ? 'block' : 'none';
+      });
+  }
+
+  // Load more
+  document.getElementById('load-more-btn').addEventListener('click', () => {
+    activityOffset += ACTIVITY_LIMIT;
+    loadActivity(true);
+  });
+
+  // Amount selection
+  document.querySelectorAll('.amount-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedAmount = parseInt(btn.dataset.amount);
+      document.getElementById('custom-amount').value = '';
+    });
+  });
+
+  document.getElementById('custom-amount').addEventListener('input', function() {
+    if (this.value) {
+      document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
+      selectedAmount = Math.round(parseFloat(this.value) * 100);
+    }
+  });
+
+  // Checkout
+  document.getElementById('checkout-btn').addEventListener('click', async () => {
+    const msg = document.getElementById('checkout-msg');
+    const btn = document.getElementById('checkout-btn');
+    msg.textContent = '';
+    msg.className = 'checkout-msg';
+
+    const custom = document.getElementById('custom-amount').value;
+    const amount = custom ? Math.round(parseFloat(custom) * 100) : selectedAmount;
+
+    if (!amount || amount < 100 || amount > 50000) {
+      msg.textContent = 'Amount must be between $1.00 and $500.00';
+      msg.classList.add('error');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Redirecting to payment...';
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        msg.textContent = data.error || 'Failed to start checkout';
+        msg.classList.add('error');
+        btn.disabled = false;
+        btn.textContent = 'Continue to Payment';
+      }
+    } catch(e) {
+      msg.textContent = 'Connection error. Please try again.';
+      msg.classList.add('error');
+      btn.disabled = false;
+      btn.textContent = 'Continue to Payment';
+    }
+  });
+})();
+</script>
+</body>
+</html>

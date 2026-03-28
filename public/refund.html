@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fulfillment &amp; Refund Policy — Reverse Sandbox LLC</title>
+<meta name="description" content="Fulfillment and refund policy for Reverse Sandbox LLC API services.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--border:#2a2a3a;--text:#e4e4ef;--text2:#8888a0;--accent:#8b5cf6;--accent2:#a78bfa;--green:#34d399;--orange:#f59e0b;--blue:#60a5fa;--code-bg:#0d0d14;--glow:rgba(139,92,246,0.15)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+code,pre{font-family:'JetBrains Mono',monospace}
+.container{max-width:1080px;margin:0 auto;padding:0 24px}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 0}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-weight:700;font-size:1.1rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.9rem;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-links .cta-link{display:flex;align-items:center;gap:6px;background:var(--surface2);padding:6px 14px;border-radius:8px;border:1px solid var(--border);font-weight:500;color:var(--text)}
+.nav-links .cta-link:hover{border-color:var(--accent);color:var(--accent2)}
+
+.policy-page{padding:120px 0 80px;max-width:720px;margin:0 auto}
+.policy-page h1{font-size:clamp(1.8rem,3vw,2.4rem);font-weight:700;margin-bottom:8px;letter-spacing:-0.02em}
+.policy-page .meta{color:var(--text2);font-size:.85rem;margin-bottom:48px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.policy-page h2{font-size:1.1rem;font-weight:600;margin:36px 0 12px;color:var(--accent2)}
+.policy-page p{color:var(--text2);font-size:.95rem;line-height:1.7;margin-bottom:14px}
+.policy-page ul{color:var(--text2);font-size:.95rem;line-height:1.7;margin:0 0 16px 24px}
+.policy-page ul li{margin-bottom:6px}
+.policy-page a{color:var(--accent2);text-decoration:none}
+.policy-page a:hover{text-decoration:underline}
+.info-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin-bottom:24px}
+.info-box .info-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent2);font-weight:600;margin-bottom:8px}
+.info-box p{color:var(--text2);font-size:.9rem;margin:0}
+.price-table{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:24px}
+.price-row{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--border)}
+.price-row:last-child{border-bottom:none}
+.price-row .service-name{font-size:.9rem;color:var(--text)}
+.price-row .price{font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--green);background:rgba(52,211,153,0.1);padding:3px 10px;border-radius:6px}
+
+footer{border-top:1px solid var(--border);padding:32px 0}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo{font-weight:700;font-size:1rem;color:var(--text)}
+.footer-logo span{color:var(--accent)}
+.footer-links{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:.85rem;transition:color .2s}
+.footer-links a:hover{color:var(--accent2)}
+.footer-contact{width:100%;display:flex;gap:32px;flex-wrap:wrap;padding-top:16px;border-top:1px solid var(--border);margin-top:8px}
+.footer-contact-item{font-size:.85rem;color:var(--text2)}
+.footer-contact-item a{color:var(--accent2);text-decoration:none}
+.footer-contact-item a:hover{text-decoration:underline}
+.footer-copy{color:var(--text2);font-size:.8rem;width:100%;text-align:center;margin-top:8px;padding-top:16px;border-top:1px solid var(--border)}
+.footer-security{width:100%;text-align:center;font-size:.78rem;color:var(--text2);margin-top:4px;opacity:.7}
+
+@media(max-width:640px){.policy-page{padding:100px 0 60px}.footer-inner{flex-direction:column;text-align:center}.price-row{flex-direction:column;gap:6px;align-items:flex-start}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="/" class="nav-logo"><span>Reverse</span>Sandbox LLC</a>
+    <div class="nav-links">
+      <a href="/#problem">Why</a>
+      <a href="/#services">Services</a>
+      <a href="mailto:contact@reversesandbox.com" class="cta-link">Contact →</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <div class="policy-page">
+    <h1>Fulfillment &amp; Refund Policy</h1>
+    <p class="meta">REVERSE SANDBOX LLC &nbsp;·&nbsp; Effective: March 13, 2026 &nbsp;·&nbsp; Questions: <a href="mailto:contact@reversesandbox.com">contact@reversesandbox.com</a></p>
+
+    <h2>Service &amp; Delivery Overview</h2>
+    <p>Reverse Sandbox LLC provides <strong>digital API services</strong> — Web Search, Web Scraping, and Screenshot — accessible programmatically over HTTPS. All services are delivered electronically and instantly at the time of the request, simultaneous with payment.</p>
+
+    <div class="info-box">
+      <div class="info-label">How payment works</div>
+      <p>Usage fees are charged per API call in <strong>USD</strong>, processed via our payment infrastructure. Each API call is billed individually. The service is fulfilled — and the result returned — in the same HTTP exchange. There is no invoice cycle, no subscription, and no pre-loaded credit balance.</p>
+    </div>
+
+    <h2>Current Pricing (USD equivalent)</h2>
+    <div class="price-table">
+      <div class="price-row">
+        <span class="service-name">Web Search API</span>
+        <span class="price">$0.002 USD per request</span>
+      </div>
+      <div class="price-row">
+        <span class="service-name">Web Scraping API</span>
+        <span class="price">$0.005 USD per request</span>
+      </div>
+      <div class="price-row">
+        <span class="service-name">Screenshot API</span>
+        <span class="price">$0.002 USD per request</span>
+      </div>
+    </div>
+    <p>All prices are denominated in USD. Prices may change; the price published at the time of your request is the price charged.</p>
+
+    <h2>Refund Policy</h2>
+    <p>Because API calls are digital goods delivered instantly at the time of payment, and because consumed API calls represent immediately delivered digital services, <strong>we do not issue refunds for successfully fulfilled API calls</strong>.</p>
+    <p>This is consistent with standard practice for digital content and on-demand software services under applicable consumer protection regulations.</p>
+
+    <h2>When We Will Consider a Refund</h2>
+    <p>Refunds may be issued at our discretion in the following documented failure scenarios:</p>
+    <ul>
+      <li><strong>Service unavailability</strong> — your payment was accepted but our service was down and never processed your request (i.e., you paid but received no result).</li>
+      <li><strong>Systematic errors</strong> — a bug in our gateway caused incorrect or empty responses to be returned for a sequence of requests, verified by server logs.</li>
+      <li><strong>Duplicate charge</strong> — you were charged more than once for the same request due to a gateway error.</li>
+    </ul>
+    <p>Refunds are <strong>not</strong> issued for:</p>
+    <ul>
+      <li>Dissatisfaction with the content of search, scrape, or screenshot results (results are determined by the live web and third-party sources).</li>
+      <li>Agent logic errors or misconfigured requests.</li>
+      <li>Requests that were successfully fulfilled but did not meet your expectations.</li>
+      <li>Network failures or timeouts on the consumer's end after a response was sent.</li>
+    </ul>
+
+    <h2>How to Request a Refund</h2>
+    <p>To request a refund, email <a href="mailto:contact@reversesandbox.com">contact@reversesandbox.com</a> within <strong>48 hours</strong> of the affected request(s) with:</p>
+    <ul>
+      <li>The payment or transaction reference for the request in question.</li>
+      <li>The timestamp and endpoint of the failed request.</li>
+      <li>A description of the error observed.</li>
+    </ul>
+    <p>We will review and respond within 3 business days. If a refund is approved, it will be issued in USD to the original payment method.</p>
+
+    <h2>Cancellation Policy</h2>
+    <p>ReverseSandbox operates on a <strong>pay-per-use model with no subscriptions</strong>. There is nothing to cancel. You stop using the service by simply not making further requests — no notice or cancellation process required, and no recurring charges will occur.</p>
+    <p>If you are a registered API <em>provider</em> and wish to delist your API from the marketplace, email <a href="mailto:contact@reversesandbox.com">contact@reversesandbox.com</a> and we will remove your listing within 2 business days.</p>
+
+    <h2>Payment Currency</h2>
+    <p>All transactions are denominated and settled in <strong>USD (US Dollars)</strong>. Usage fees are charged per API call at the published rates. Payment processing is handled securely by our payment infrastructure. No payment card data is ever collected or stored on our servers.</p>
+
+    <h2>Contact</h2>
+    <p>For fulfillment or refund questions:<br>
+    Email: <a href="mailto:contact@reversesandbox.com">contact@reversesandbox.com</a><br>
+    We typically respond within 24 hours on business days.</p>
+    <p>REVERSE SANDBOX LLC<br>940 NW Fremont St, Camas, WA 98607-9376, USA</p>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo"><span>Reverse</span>Sandbox LLC</div>
+      <div class="footer-links">
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/refund.html">Refund Policy</a>
+        <a href="https://search.reversesandbox.com">Search API</a>
+        <a href="mailto:contact@reversesandbox.com">Contact</a>
+      </div>
+      <div class="footer-contact">
+        <span class="footer-contact-item">Email: <a href="mailto:contact@reversesandbox.com">contact@reversesandbox.com</a></span>
+        <span class="footer-contact-item">We typically respond within 24 hours</span>
+      </div>
+    </div>
+    <div class="footer-security">Payments processed securely via third-party payment processors · No card data stored on our servers · Usage-based billing in USD</div>
+    <div class="footer-copy">© 2026 REVERSE SANDBOX LLC · Enabling the agent economy</div>
+  </div>
+</footer>
+
+<script src="/js/auth.js"></script>
+</body>
+</html>
