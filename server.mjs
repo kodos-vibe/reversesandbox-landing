@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
 import helmet from 'helmet';
-import session from 'express-session';
 import { auth } from 'express-openid-connect';
 import { join, dirname, extname } from 'path';
 import { fileURLToPath } from 'url';
@@ -17,6 +16,9 @@ const PORT = parseInt(process.env.PORT) || 4025;
 const HOST = process.env.HOST || '127.0.0.1';
 
 const app = express();
+
+// Trust Cloudflare proxy (needed for secure cookies + OIDC state)
+app.set("trust proxy", 1);
 
 // Initialize database on startup
 getDb();
@@ -62,8 +64,17 @@ if (auth0Configured) {
       logout: '/logout',
       login: '/login',
     },
+    // Controls the OIDC state's returnTo — this is what the library actually
+    // uses for the post-callback redirect (NOT session.returnTo).
+    getLoginState: (_req, _options) => {
+      return { returnTo: '/auth/sync' };
+    },
     session: {
       rollingDuration: 86400,
+      cookie: { secure: true, sameSite: 'Lax' },
+    },
+    transactionCookie: {
+      sameSite: 'Lax',
     },
   }));
   // Auth routes (sync, /api/me)

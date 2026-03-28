@@ -4,17 +4,6 @@ import { requireAuth } from '../middleware/auth.mjs';
 
 const router = Router();
 
-// After Auth0 callback, ensure user exists in our DB
-router.get('/callback', (req, res, next) => {
-  // express-openid-connect handles the actual OIDC callback automatically.
-  // This route exists so that after the middleware processes the callback,
-  // we can do our DB sync. The middleware will have already set req.oidc.
-  next();
-}, (req, res) => {
-  // After OIDC middleware processes, redirect to a sync endpoint
-  res.redirect('/auth/sync');
-});
-
 router.get('/auth/sync', (req, res) => {
   if (!req.oidc || !req.oidc.isAuthenticated()) {
     return res.redirect('/');
