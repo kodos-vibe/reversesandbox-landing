@@ -108,6 +108,9 @@ app.get('/dashboard', (req, res, next) => {
   res.sendFile(join(__dirname, 'public', 'dashboard.html'));
 });
 
+// Guide page — public, no auth required
+app.get('/guide', (_req, res) => res.sendFile(join(__dirname, 'public', 'guide.html')));
+
 // Clean URL routes for policy pages
 app.get('/terms', (_req, res) => res.sendFile(join(__dirname, 'public', 'terms.html')));
 app.get('/privacy', (_req, res) => res.sendFile(join(__dirname, 'public', 'privacy.html')));

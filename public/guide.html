@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent Setup Guide — ReverseSandbox</title>
+<meta name="description" content="Set up your AI agent with ReverseSandbox in 2 minutes. Give your agent the ability to pay for x402 services.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--border:#2a2a3a;--text:#e4e4ef;--text2:#8888a0;--accent:#8b5cf6;--accent2:#a78bfa;--green:#34d399;--orange:#f59e0b;--blue:#60a5fa;--red:#f87171;--code-bg:#0d0d14;--glow:rgba(139,92,246,0.15)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+code,pre{font-family:'JetBrains Mono',monospace}
+.container{max-width:1080px;margin:0 auto;padding:0 24px}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 0}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-weight:700;font-size:1.1rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.9rem;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-links .cta-link{display:flex;align-items:center;gap:6px;background:var(--surface2);padding:6px 14px;border-radius:8px;border:1px solid var(--border);font-weight:500;color:var(--text)}
+.nav-links .cta-link:hover{border-color:var(--accent);color:var(--accent2)}
+
+.hero{padding-top:140px;padding-bottom:60px;text-align:center;position:relative}
+.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);pointer-events:none}
+h1{font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-0.03em;line-height:1.1;margin-bottom:16px}
+h1 .highlight{background:linear-gradient(135deg,var(--accent),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.1rem;color:var(--text2);max-width:560px;margin:0 auto}
+
+.guide-section{padding:60px 0}
+.guide-section:nth-child(even){background:var(--surface)}
+
+.section-label{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent2);font-weight:600;margin-bottom:12px}
+.section-title{font-size:clamp(1.4rem,2.5vw,1.8rem);font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
+.section-desc{color:var(--text2);font-size:1rem;margin-bottom:24px}
+
+.step-header{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.step-num{width:48px;height:48px;border-radius:12px;background:var(--glow);border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;color:var(--accent2);flex-shrink:0}
+
+.btn{padding:12px 28px;border-radius:10px;font-size:.95rem;font-weight:600;text-decoration:none;transition:all .2s;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent2)}
+
+/* Tabs */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:0}
+.tab-btn{padding:10px 20px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text2);font-size:.85rem;font-weight:500;cursor:pointer;transition:all .2s;font-family:'Inter',system-ui,sans-serif}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{color:var(--accent2);border-bottom-color:var(--accent)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* Code blocks */
+.code-block{position:relative;background:var(--code-bg);border:1px solid var(--border);border-radius:0 0 10px 10px;overflow:hidden}
+.code-block.standalone{border-radius:10px}
+.code-block pre{padding:20px;overflow-x:auto;font-size:.85rem;line-height:1.6;color:var(--text)}
+.copy-btn{position:absolute;top:10px;right:10px;padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:.75rem;cursor:pointer;transition:all .2s;font-family:'Inter',system-ui,sans-serif}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent2)}
+.copy-btn.copied{border-color:var(--green);color:var(--green)}
+
+/* Tools list */
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-top:20px}
+.tool-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px}
+.tool-card h4{font-size:.95rem;font-weight:600;margin-bottom:6px;color:var(--accent2);font-family:'JetBrains Mono',monospace}
+.tool-card p{color:var(--text2);font-size:.85rem}
+
+/* Flow example */
+.flow-block{background:var(--code-bg);border:1px solid var(--border);border-radius:10px;padding:24px;font-size:.85rem;line-height:1.8;overflow-x:auto}
+.flow-block .flow-user{color:var(--blue)}
+.flow-block .flow-agent{color:var(--accent2);font-style:italic}
+.flow-block .flow-req{color:var(--orange)}
+.flow-block .flow-res{color:var(--green)}
+.flow-block .flow-dim{color:var(--text2)}
+
+/* Pricing table */
+.pricing-table{width:100%;border-collapse:collapse;margin-top:16px}
+.pricing-table th{text-align:left;color:var(--text2);font-weight:500;padding:10px 16px;border-bottom:1px solid var(--border);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}
+.pricing-table td{padding:12px 16px;border-bottom:1px solid var(--border);font-size:.9rem}
+.pricing-table tr:last-child td{border-bottom:none}
+.pricing-table .price{font-family:'JetBrains Mono',monospace;color:var(--green);font-weight:600}
+
+/* CTA */
+.guide-cta{text-align:center;padding:80px 0;position:relative}
+.guide-cta::before{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:500px;height:400px;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);pointer-events:none}
+.guide-cta h2{font-size:1.8rem;font-weight:700;margin-bottom:12px}
+.guide-cta p{color:var(--text2);margin-bottom:24px;font-size:1rem}
+
+footer{border-top:1px solid var(--border);padding:32px 0}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo{font-weight:700;font-size:1rem;color:var(--text)}
+.footer-logo span{color:var(--accent)}
+.footer-links{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:.85rem;transition:color .2s}
+.footer-links a:hover{color:var(--accent2)}
+.footer-contact{width:100%;display:flex;gap:32px;flex-wrap:wrap;padding-top:16px;border-top:1px solid var(--border);margin-top:8px}
+.footer-contact-item{font-size:.85rem;color:var(--text2)}
+.footer-contact-item a{color:var(--accent2);text-decoration:none}
+.footer-contact-item a:hover{text-decoration:underline}
+.footer-copy{color:var(--text2);font-size:.8rem;width:100%;text-align:center;margin-top:8px;padding-top:16px;border-top:1px solid var(--border)}
+.footer-security{width:100%;text-align:center;font-size:.78rem;color:var(--text2);margin-top:4px;opacity:.7}
+
+@media(max-width:640px){.hero{padding-top:110px}.tools-grid{grid-template-columns:1fr}.tabs{flex-wrap:wrap}.tab-btn{flex:1;text-align:center;min-width:auto;font-size:.8rem;padding:8px 12px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="/" class="nav-logo"><span>Reverse</span>Sandbox LLC</a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/guide" style="color:var(--accent2)">Guide</a>
+      <a href="/dashboard" class="cta-link">Dashboard</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1>Set Up Your Agent <span class="highlight">in 2 Minutes</span></h1>
+    <p>Give your AI agent the ability to pay for x402 services — no crypto needed.</p>
+  </div>
+</section>
+
+<!-- Step 1 -->
+<section class="guide-section">
+  <div class="container">
+    <div class="step-header">
+      <div class="step-num">1</div>
+      <div>
+        <div class="section-title">Get Your API Key</div>
+        <div class="section-desc">Sign up and generate an API key from your dashboard.</div>
+      </div>
+    </div>
+    <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+  </div>
+</section>
+
+<!-- Step 2 -->
+<section class="guide-section">
+  <div class="container">
+    <div class="step-header">
+      <div class="step-num">2</div>
+      <div>
+        <div class="section-title">Install the MCP Server</div>
+        <div class="section-desc">Add the ReverseSandbox MCP server to your AI platform. Replace <code>your-api-key-here</code> with your actual key.</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="claude-desktop">Claude Desktop</button>
+      <button class="tab-btn" data-tab="claude-code">Claude Code</button>
+      <button class="tab-btn" data-tab="openclaw">OpenClaw</button>
+      <button class="tab-btn" data-tab="generic">Generic</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-claude-desktop">
+      <div class="code-block">
+        <button class="copy-btn" data-copy="claude-desktop">Copy</button>
+        <pre id="code-claude-desktop">{
+  "mcpServers": {
+    "reversesandbox": {
+      "command": "npx",
+      "args": ["-y", "reversesandbox-mcp"],
+      "env": {
+        "RS_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}</pre>
+      </div>
+      <p style="color:var(--text2);font-size:.85rem;margin-top:12px">Add this to your <code>claude_desktop_config.json</code> file.</p>
+    </div>
+
+    <div class="tab-panel" id="tab-claude-code">
+      <div class="code-block">
+        <button class="copy-btn" data-copy="claude-code">Copy</button>
+        <pre id="code-claude-code">claude mcp add reversesandbox -- npx -y reversesandbox-mcp
+
+# Then set your API key:
+export RS_API_KEY="your-api-key-here"</pre>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="tab-openclaw">
+      <div class="code-block">
+        <button class="copy-btn" data-copy="openclaw">Copy</button>
+        <pre id="code-openclaw">{
+  "mcpServers": {
+    "reversesandbox": {
+      "command": "npx",
+      "args": ["-y", "reversesandbox-mcp"],
+      "env": {
+        "RS_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}</pre>
+      </div>
+      <p style="color:var(--text2);font-size:.85rem;margin-top:12px">Add this to your <code>.mcp.json</code> file in your project root.</p>
+    </div>
+
+    <div class="tab-panel" id="tab-generic">
+      <div class="code-block">
+        <button class="copy-btn" data-copy="generic">Copy</button>
+        <pre id="code-generic">export RS_API_KEY="your-api-key-here"
+npx -y reversesandbox-mcp</pre>
+      </div>
+      <p style="color:var(--text2);font-size:.85rem;margin-top:12px">Set the environment variable and run the MCP server directly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Step 3 -->
+<section class="guide-section">
+  <div class="container">
+    <div class="step-header">
+      <div class="step-num">3</div>
+      <div>
+        <div class="section-title">Your Agent is Ready</div>
+        <div class="section-desc">Your agent now has 3 new tools:</div>
+      </div>
+    </div>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <h4>pay</h4>
+        <p>Sign a payment for an x402 service. The agent uses this automatically when it gets a 402 response.</p>
+      </div>
+      <div class="tool-card">
+        <h4>get_balance</h4>
+        <p>Check your current ReverseSandbox balance. The agent can verify it has funds before making requests.</p>
+      </div>
+      <div class="tool-card">
+        <h4>get_usage</h4>
+        <p>View recent usage and spending. Helps the agent track costs and report back to you.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Example flow -->
+<section class="guide-section">
+  <div class="container">
+    <div class="section-label">Example</div>
+    <div class="section-title" style="margin-bottom:20px">How It Works</div>
+    <div class="flow-block">
+<span class="flow-user">You:</span> "Search for the latest AI safety research papers"
+
+<span class="flow-agent">Agent thinks: I'll search using an x402 search service.</span>
+
+<span class="flow-req">--> GET https://search.reversesandbox.com/search?q=latest+AI+safety+research</span>
+<span class="flow-res"><-- 402 Payment Required</span>
+<span class="flow-dim">    {"payTo": "0x5770...", "maxAmountRequired": "0.002", "network": "base"}</span>
+
+<span class="flow-agent">Agent thinks: I need to pay. Let me use my ReverseSandbox payment tool.</span>
+
+<span class="flow-req">--> pay(to="0x5770...", amount="0.002", network="base")</span>
+<span class="flow-res"><-- Payment signed! Header: X-PAYMENT: eyJhbG...</span>
+
+<span class="flow-req">--> GET https://search.reversesandbox.com/search?q=latest+AI+safety+research</span>
+<span class="flow-dim">    X-PAYMENT: eyJhbG...</span>
+<span class="flow-res"><-- 200 OK — Search results returned</span>
+
+<span class="flow-user">Agent:</span> "Here are the latest AI safety research papers..."
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="guide-section">
+  <div class="container">
+    <div class="section-label">Pricing</div>
+    <div class="section-title">Pay per request</div>
+    <div class="section-desc">No subscriptions. Your agent only pays when it uses a service.</div>
+    <table class="pricing-table">
+      <thead><tr><th>Service</th><th>Price per request</th></tr></thead>
+      <tbody>
+        <tr><td>Web Search</td><td class="price">$0.002</td></tr>
+        <tr><td>Web Scrape</td><td class="price">$0.005</td></tr>
+        <tr><td>Screenshot</td><td class="price">$0.002</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Try it -->
+<section class="guide-section">
+  <div class="container">
+    <div class="section-label">Try It Now</div>
+    <div class="section-title" style="margin-bottom:8px">See the 402 response yourself</div>
+    <div class="section-desc">Run this in your terminal to see how x402 works:</div>
+    <div class="code-block standalone" style="margin-top:16px">
+      <button class="copy-btn" data-copy="try-it">Copy</button>
+      <pre id="code-try-it">curl -s https://search.reversesandbox.com/search?q=hello | head -20</pre>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="guide-cta">
+  <div class="container">
+    <h2>Ready to get started?</h2>
+    <p>Sign up and fund your account to start paying for x402 services.</p>
+    <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo"><span>Reverse</span>Sandbox LLC</div>
+      <div class="footer-links">
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/refund.html">Refund Policy</a>
+        <a href="https://search.reversesandbox.com">Search API</a>
+        <a href="mailto:contact@reversesandbox.com">Contact</a>
+      </div>
+      <div class="footer-contact">
+        <span class="footer-contact-item">Email: <a href="mailto:contact@reversesandbox.com">contact@reversesandbox.com</a></span>
+        <span class="footer-contact-item">We typically respond within 24 hours</span>
+        <span class="footer-contact-item">REVERSE SANDBOX LLC · 940 NW Fremont St, Camas, WA 98607-9376, USA</span>
+      </div>
+    </div>
+    <div class="footer-security">Payments processed securely via third-party payment processors · No card data stored on our servers · Usage-based billing in USD</div>
+    <div class="footer-copy">&copy; 2026 REVERSE SANDBOX LLC · Enabling the agent economy</div>
+  </div>
+</footer>
+
+<script src="/js/auth.js"></script>
+<script>
+(function() {
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Copy buttons
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = 'code-' + btn.dataset.copy;
+      const code = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

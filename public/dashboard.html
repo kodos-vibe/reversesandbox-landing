@@ -118,6 +118,7 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
     <a href="/" class="nav-logo"><span>Reverse</span>Sandbox LLC</a>
     <div class="nav-links">
       <a href="/">Home</a>
+      <a href="/guide">Guide</a>
       <a href="/dashboard" style="color:var(--accent2)">Dashboard</a>
       <a href="/logout">Sign Out</a>
     </div>
@@ -183,6 +184,26 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
             <tbody id="keys-tbody"></tbody>
           </table>
           <div class="keys-empty" id="keys-empty">No API keys yet. Generate one to get started.</div>
+        </div>
+
+        <div class="card keys-card" id="quickstart-card">
+          <h2>Quick Start</h2>
+          <p style="color:var(--text2);font-size:.9rem;margin-bottom:16px">Add this to your AI platform to give your agent payment abilities:</p>
+          <div style="position:relative;background:var(--code-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:16px">
+            <button class="copy-btn" id="copy-config-btn" style="position:absolute;top:10px;right:10px;padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:.75rem;cursor:pointer;z-index:1">Copy</button>
+            <pre id="quickstart-config" style="padding:20px;overflow-x:auto;font-size:.85rem;line-height:1.6;color:var(--text);margin:0">{
+  "mcpServers": {
+    "reversesandbox": {
+      "command": "npx",
+      "args": ["-y", "reversesandbox-mcp"],
+      "env": {
+        "RS_API_KEY": "<span id="qs-api-key" style="color:var(--orange)">your-api-key-here</span>"
+      }
+    }
+  }
+}</pre>
+          </div>
+          <a href="/guide" style="color:var(--accent2);font-size:.9rem;text-decoration:none">See full setup guide &rarr;</a>
         </div>
 
         <div class="card activity-card">
@@ -353,6 +374,11 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
         }
         table.style.display = 'table';
         empty.style.display = 'none';
+        // Auto-fill Quick Start with first active key prefix
+        const activeKey = data.keys.find(k => k.status === 'active');
+        if (activeKey) {
+          document.getElementById('qs-api-key').textContent = activeKey.key_prefix + '...';
+        }
         data.keys.forEach(k => {
           const tr = document.createElement('tr');
           const statusCls = k.status === 'active' ? 'active' : 'revoked';
@@ -406,6 +432,7 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
         const box = document.getElementById('new-key-box');
         document.getElementById('new-key-value').textContent = data.key;
         box.style.display = 'block';
+        document.getElementById('qs-api-key').textContent = data.key;
         nameInput.value = '';
         showToast('API key generated', 'success');
         loadKeys();
@@ -422,6 +449,32 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
       showToast('Key copied to clipboard', 'success');
     }).catch(() => {
       showToast('Failed to copy key', 'error');
+    });
+  });
+
+  // Quick Start config copy
+  document.getElementById('copy-config-btn').addEventListener('click', () => {
+    const keyEl = document.getElementById('qs-api-key');
+    const apiKey = keyEl.textContent;
+    const config = JSON.stringify({
+      mcpServers: {
+        reversesandbox: {
+          command: "npx",
+          args: ["-y", "reversesandbox-mcp"],
+          env: { RS_API_KEY: apiKey }
+        }
+      }
+    }, null, 2);
+    navigator.clipboard.writeText(config).then(() => {
+      const btn = document.getElementById('copy-config-btn');
+      btn.textContent = 'Copied!';
+      btn.style.borderColor = 'var(--green)';
+      btn.style.color = 'var(--green)';
+      setTimeout(() => {
+        btn.textContent = 'Copy';
+        btn.style.borderColor = '';
+        btn.style.color = '';
+      }, 2000);
     });
   });
 
