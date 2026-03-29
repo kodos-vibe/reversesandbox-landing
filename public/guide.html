@@ -165,8 +165,8 @@ footer{border-top:1px solid var(--border);padding:32px 0}
         <pre id="code-claude-desktop">{
   "mcpServers": {
     "reversesandbox": {
-      "command": "npx",
-      "args": ["-y", "reversesandbox-mcp"],
+      "command": "node",
+      "args": ["/path/to/reversesandbox-mcp/index.mjs"],
       "env": {
         "RS_API_KEY": "your-api-key-here"
       }
@@ -174,7 +174,10 @@ footer{border-top:1px solid var(--border);padding:32px 0}
   }
 }</pre>
       </div>
-      <p style="color:var(--text2);font-size:.85rem;margin-top:12px">Add this to your <code>claude_desktop_config.json</code> file.</p>
+      <p style="color:var(--text2);font-size:.85rem;margin-top:12px">
+        First, clone the repo: <code>git clone https://github.com/kodos-vibe/reversesandbox-mcp.git &amp;&amp; cd reversesandbox-mcp &amp;&amp; npm install</code><br>
+        Then add the above to your <code>claude_desktop_config.json</code>, replacing the path with where you cloned it.
+      </p>
     </div>
 
     <div class="tab-panel" id="tab-claude-code">
@@ -207,8 +210,8 @@ cd reversesandbox-mcp &amp;&amp; npm install</pre>
         <pre id="code-openclaw">{
   "mcpServers": {
     "reversesandbox": {
-      "command": "npx",
-      "args": ["-y", "reversesandbox-mcp"],
+      "command": "node",
+      "args": ["/path/to/reversesandbox-mcp/index.mjs"],
       "env": {
         "RS_API_KEY": "your-api-key-here"
       }
@@ -216,7 +219,10 @@ cd reversesandbox-mcp &amp;&amp; npm install</pre>
   }
 }</pre>
       </div>
-      <p style="color:var(--text2);font-size:.85rem;margin-top:12px">Add this to your <code>.mcp.json</code> file in your project root.</p>
+      <p style="color:var(--text2);font-size:.85rem;margin-top:12px">
+        First, clone the repo: <code>git clone https://github.com/kodos-vibe/reversesandbox-mcp.git &amp;&amp; cd reversesandbox-mcp &amp;&amp; npm install</code><br>
+        Then add the above to your <code>.mcp.json</code> in your project root, replacing the path.
+      </p>
     </div>
 
     <div class="tab-panel" id="tab-generic">
