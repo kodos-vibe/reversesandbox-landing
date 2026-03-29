@@ -59,6 +59,29 @@ router.post('/api/pay', async (req, res) => {
   }
 
   try {
+    // Fetch the x402 payment requirements from our gateway
+    let acceptedRequirements = null;
+    try {
+      const gatewayUrl = process.env.X402_GATEWAY_URL || "http://127.0.0.1:4021";
+      const probeRes = await fetch(gatewayUrl + "/web/search?q=probe");
+      if (probeRes.status === 402) {
+        const payReqHeader = probeRes.headers.get("payment-required");
+        if (payReqHeader) {
+          const payReq = JSON.parse(Buffer.from(payReqHeader, "base64").toString());
+          // Find matching network from accepts
+          const networkMap = { base: "eip155:8453", polygon: "eip155:137", arbitrum: "eip155:42161", sepolia: "eip155:11155111" };
+          const caipNetwork = networkMap[network] || network;
+          acceptedRequirements = payReq.accepts?.find(a => a.network === caipNetwork);
+          if (!acceptedRequirements) {
+            // Fallback: use first EVM accept
+            acceptedRequirements = payReq.accepts?.find(a => a.network?.startsWith("eip155:"));
+          }
+        }
+      }
+    } catch (probeErr) {
+      console.warn("[pay] Failed to probe gateway for requirements:", probeErr.message);
+    }
+
     const signResult = await signPayment({
       to,
       amount: String(amount),
@@ -67,7 +90,7 @@ router.post('/api/pay', async (req, res) => {
       validSeconds: valid_seconds,
     });
 
-    const paymentHeader = buildX402PaymentHeader(signResult);
+    const paymentHeader = buildX402PaymentHeader(signResult, acceptedRequirements);
 
     // Deduct cost and log usage
     deductBalance(req.apiUser.id, costCents);
