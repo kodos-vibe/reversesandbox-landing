@@ -7,8 +7,13 @@
     .then(r => r.json())
     .then(data => {
       if (!data.authenticated) {
-        // Add Sign In button (only if not already present)
-        if (!navLinks.querySelector('.auth-signin')) {
+        // Remove static Dashboard CTA if present (replace with Sign In)
+        const staticDash = navLinks.querySelector('.cta-link');
+        if (staticDash && staticDash.textContent.trim() === 'Dashboard') {
+          staticDash.href = '/login';
+          staticDash.textContent = 'Sign In';
+          staticDash.classList.add('auth-signin');
+        } else if (!navLinks.querySelector('.auth-signin')) {
           const signIn = document.createElement('a');
           signIn.href = '/login';
           signIn.className = 'cta-link auth-signin';
@@ -18,8 +23,9 @@
         return;
       }
 
-      // Authenticated — show user menu
-      const existing = navLinks.querySelector('.cta-link:last-child');
+      // Authenticated — replace static Dashboard CTA with user menu
+      const staticDash = navLinks.querySelector('.cta-link');
+      if (staticDash) staticDash.remove();
 
       const userEl = document.createElement('div');
       userEl.style.cssText = 'display:flex;align-items:center;gap:12px;';
