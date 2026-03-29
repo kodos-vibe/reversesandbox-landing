@@ -9,6 +9,7 @@ import { existsSync, statSync } from 'fs';
 import { getDb } from './lib/db.mjs';
 import authRoutes from './routes/auth.mjs';
 import apiRoutes from './routes/api.mjs';
+import keyRoutes from './routes/keys.mjs';
 import webhookRoutes from './routes/webhooks.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -90,6 +91,7 @@ if (auth0Configured) {
 
 // API routes
 app.use(apiRoutes);
+app.use(keyRoutes);
 
 // Home page
 app.get('/', (_req, res) => res.sendFile(join(__dirname, 'public', 'index.html')));

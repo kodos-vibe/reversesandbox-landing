@@ -56,6 +56,33 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
 .profile-row .label{color:var(--text2)}
 .profile-row .value{color:var(--text);font-weight:500}
 
+/* API Keys */
+.keys-card{grid-column:1/-1}
+.keys-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.keys-header h2{margin-bottom:0}
+.generate-btn{padding:8px 18px;border-radius:8px;border:1px solid var(--accent);background:var(--glow);color:var(--accent2);font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s}
+.generate-btn:hover{background:var(--accent);color:#fff}
+.generate-btn:disabled{opacity:.5;cursor:not-allowed}
+.keys-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.keys-table th{text-align:left;color:var(--text2);font-weight:500;padding:8px 12px;border-bottom:1px solid var(--border);font-size:.75rem;text-transform:uppercase;letter-spacing:.06em}
+.keys-table td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.keys-table tr:last-child td{border-bottom:none}
+.key-prefix{font-family:'JetBrains Mono',monospace;color:var(--accent2)}
+.key-status{display:inline-block;padding:2px 10px;border-radius:6px;font-size:.75rem;font-weight:600}
+.key-status.active{background:rgba(52,211,153,0.15);color:var(--green)}
+.key-status.revoked{background:rgba(248,113,113,0.15);color:var(--red)}
+.revoke-btn{padding:4px 14px;border-radius:6px;border:1px solid var(--red);background:transparent;color:var(--red);font-size:.8rem;cursor:pointer;transition:all .2s}
+.revoke-btn:hover{background:rgba(248,113,113,0.15)}
+.new-key-box{background:var(--code-bg);border:1px solid var(--accent);border-radius:10px;padding:16px;margin-bottom:16px;display:none}
+.new-key-box .key-warning{color:var(--orange);font-size:.8rem;margin-bottom:8px;font-weight:600}
+.new-key-box .key-value{display:flex;gap:8px;align-items:center}
+.new-key-box .key-value code{flex:1;font-size:.85rem;color:var(--green);word-break:break-all}
+.copy-btn{padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:.8rem;cursor:pointer;transition:all .2s;white-space:nowrap}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent2)}
+.keys-empty{text-align:center;padding:24px;color:var(--text2);font-size:.9rem}
+.key-name-input{padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:var(--code-bg);color:var(--text);font-size:.85rem;width:140px;margin-right:8px;outline:none}
+.key-name-input:focus{border-color:var(--accent)}
+
 /* Activity Feed */
 .activity-card{grid-column:1/-1}
 .activity-list{display:flex;flex-direction:column;gap:0}
@@ -136,6 +163,28 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
           <div class="profile-row"><span class="label">Last login</span><span class="value" id="profile-login">—</span></div>
         </div>
 
+        <div class="card keys-card">
+          <div class="keys-header">
+            <h2>API Keys</h2>
+            <div>
+              <input type="text" class="key-name-input" id="key-name" placeholder="Key name" maxlength="64">
+              <button class="generate-btn" id="generate-key-btn">Generate New Key</button>
+            </div>
+          </div>
+          <div class="new-key-box" id="new-key-box">
+            <div class="key-warning">Save this key — it will not be shown again</div>
+            <div class="key-value">
+              <code id="new-key-value"></code>
+              <button class="copy-btn" id="copy-key-btn">Copy</button>
+            </div>
+          </div>
+          <table class="keys-table" id="keys-table" style="display:none">
+            <thead><tr><th>Key</th><th>Name</th><th>Status</th><th>Created</th><th>Last Used</th><th></th></tr></thead>
+            <tbody id="keys-tbody"></tbody>
+          </table>
+          <div class="keys-empty" id="keys-empty">No API keys yet. Generate one to get started.</div>
+        </div>
+
         <div class="card activity-card">
           <h2>Activity</h2>
           <div class="activity-list" id="activity-list">
@@ -204,6 +253,8 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
     logout:       { icon: '←', label: 'Signed out', cls: 'logout' },
     payment:      { icon: '$', label: 'Payment received', cls: 'payment' },
     credit:       { icon: '+', label: 'Credit added', cls: 'credit' },
+    api_key_created: { icon: '⚿', label: 'API key created', cls: 'registration' },
+    api_key_revoked: { icon: '⚿', label: 'API key revoked', cls: 'logout' },
   };
 
   // Load user data
@@ -223,6 +274,7 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
       document.getElementById('profile-email').textContent = u.email;
       document.getElementById('profile-created').textContent = fmtDate(u.created_at);
       document.getElementById('profile-login').textContent = fmtDate(u.last_login_at);
+      loadKeys();
       loadActivity();
     })
     .catch(() => {
@@ -283,6 +335,94 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
       document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
       selectedAmount = Math.round(parseFloat(this.value) * 100);
     }
+  });
+
+  // --- API Keys ---
+  function loadKeys() {
+    fetch('/api/keys')
+      .then(r => r.json())
+      .then(data => {
+        const tbody = document.getElementById('keys-tbody');
+        const table = document.getElementById('keys-table');
+        const empty = document.getElementById('keys-empty');
+        tbody.innerHTML = '';
+        if (!data.keys || data.keys.length === 0) {
+          table.style.display = 'none';
+          empty.style.display = 'block';
+          return;
+        }
+        table.style.display = 'table';
+        empty.style.display = 'none';
+        data.keys.forEach(k => {
+          const tr = document.createElement('tr');
+          const statusCls = k.status === 'active' ? 'active' : 'revoked';
+          const revokeCell = k.status === 'active'
+            ? '<button class="revoke-btn" data-id="' + k.id + '">Revoke</button>'
+            : '';
+          tr.innerHTML = '<td class="key-prefix">' + k.key_prefix + '...</td>'
+            + '<td>' + (k.name || 'Default') + '</td>'
+            + '<td><span class="key-status ' + statusCls + '">' + k.status + '</span></td>'
+            + '<td>' + fmtDate(k.created_at) + '</td>'
+            + '<td>' + (k.last_used_at ? fmtTime(k.last_used_at) : 'Never') + '</td>'
+            + '<td>' + revokeCell + '</td>';
+          tbody.appendChild(tr);
+        });
+        // Bind revoke buttons
+        tbody.querySelectorAll('.revoke-btn').forEach(btn => {
+          btn.addEventListener('click', () => revokeKey(btn.dataset.id));
+        });
+      });
+  }
+
+  function revokeKey(id) {
+    fetch('/api/keys/' + id, { method: 'DELETE' })
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) {
+          showToast(data.error, 'error');
+        } else {
+          showToast('API key revoked', 'success');
+          loadKeys();
+        }
+      })
+      .catch(() => showToast('Failed to revoke key', 'error'));
+  }
+
+  document.getElementById('generate-key-btn').addEventListener('click', async () => {
+    const btn = document.getElementById('generate-key-btn');
+    const nameInput = document.getElementById('key-name');
+    const name = nameInput.value.trim() || 'Default';
+    btn.disabled = true;
+    try {
+      const res = await fetch('/api/keys', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name }),
+      });
+      const data = await res.json();
+      if (data.error) {
+        showToast(data.error, 'error');
+      } else {
+        const box = document.getElementById('new-key-box');
+        document.getElementById('new-key-value').textContent = data.key;
+        box.style.display = 'block';
+        nameInput.value = '';
+        showToast('API key generated', 'success');
+        loadKeys();
+      }
+    } catch(e) {
+      showToast('Failed to generate key', 'error');
+    }
+    btn.disabled = false;
+  });
+
+  document.getElementById('copy-key-btn').addEventListener('click', () => {
+    const key = document.getElementById('new-key-value').textContent;
+    navigator.clipboard.writeText(key).then(() => {
+      showToast('Key copied to clipboard', 'success');
+    }).catch(() => {
+      showToast('Failed to copy key', 'error');
+    });
   });
 
   // Checkout
