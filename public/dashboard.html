@@ -96,6 +96,12 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
 .activity-icon.credit{background:rgba(52,211,153,0.15);color:var(--green)}
 .activity-desc{flex:1;font-size:.9rem;color:var(--text)}
 .activity-time{font-size:.8rem;color:var(--text2);white-space:nowrap}
+.activity-toggle{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.activity-toggle h2{margin:0}
+.activity-chevron{font-size:1.2rem;color:var(--text2);transition:transform .2s}
+.activity-chevron.open{transform:rotate(180deg)}
+.activity-body{overflow:hidden;transition:max-height .3s ease;max-height:0}
+.activity-body.open{max-height:2000px}
 .activity-empty{text-align:center;padding:32px;color:var(--text2);font-size:.9rem}
 .load-more{text-align:center;padding-top:16px}
 .load-more button{padding:8px 24px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:.85rem;cursor:pointer;transition:all .2s}
@@ -206,13 +212,15 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
           <a href="/guide" style="color:var(--accent2);font-size:.9rem;text-decoration:none">See full setup guide &rarr;</a>
         </div>
 
-        <div class="card activity-card">
-          <h2>Activity</h2>
-          <div class="activity-list" id="activity-list">
-            <div class="activity-empty">No activity yet</div>
-          </div>
-          <div class="load-more" id="load-more" style="display:none">
-            <button id="load-more-btn">Load more</button>
+        <div class="card activity-card" id="activity-card">
+          <div class="activity-toggle" id="activity-toggle"><h2>Activity</h2><span class="activity-chevron" id="activity-chevron">▼</span></div>
+          <div class="activity-body" id="activity-body">
+            <div class="activity-list" id="activity-list">
+              <div class="activity-empty">No activity yet</div>
+            </div>
+            <div class="load-more" id="load-more" style="display:none">
+              <button id="load-more-btn">Load more</button>
+            </div>
           </div>
         </div>
       </div>
@@ -336,6 +344,13 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
   }
 
   // Load more
+  // Activity toggle (collapsed by default)
+  document.getElementById("activity-toggle").addEventListener("click", () => {
+    const body = document.getElementById("activity-body");
+    const chevron = document.getElementById("activity-chevron");
+    body.classList.toggle("open");
+    chevron.classList.toggle("open");
+  });
   document.getElementById('load-more-btn').addEventListener('click', () => {
     activityOffset += ACTIVITY_LIMIT;
     loadActivity(true);
