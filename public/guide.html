@@ -180,11 +180,25 @@ footer{border-top:1px solid var(--border);padding:32px 0}
     <div class="tab-panel" id="tab-claude-code">
       <div class="code-block">
         <button class="copy-btn" data-copy="claude-code">Copy</button>
-        <pre id="code-claude-code">claude mcp add reversesandbox -- npx -y reversesandbox-mcp
+        <pre id="code-claude-code"># Add to your project's .mcp.json (or ~/.claude.json under projects):
+{
+  "mcpServers": {
+    "reversesandbox": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/path/to/reversesandbox-mcp/index.mjs"],
+      "env": {
+        "RS_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
 
-# Then set your API key:
-export RS_API_KEY="your-api-key-here"</pre>
+# Install from GitHub:
+git clone https://github.com/kodos-vibe/reversesandbox-mcp.git
+cd reversesandbox-mcp &amp;&amp; npm install</pre>
       </div>
+      <p style="color:var(--text2);font-size:.85rem;margin-top:12px">Set the <code>args</code> path to where you cloned the repo. Restart Claude Code after adding.</p>
     </div>
 
     <div class="tab-panel" id="tab-openclaw">
@@ -208,10 +222,14 @@ export RS_API_KEY="your-api-key-here"</pre>
     <div class="tab-panel" id="tab-generic">
       <div class="code-block">
         <button class="copy-btn" data-copy="generic">Copy</button>
-        <pre id="code-generic">export RS_API_KEY="your-api-key-here"
-npx -y reversesandbox-mcp</pre>
+        <pre id="code-generic"># Install from GitHub
+git clone https://github.com/kodos-vibe/reversesandbox-mcp.git
+cd reversesandbox-mcp &amp;&amp; npm install
+
+# Run with your API key
+RS_API_KEY="your-api-key-here" node index.mjs</pre>
       </div>
-      <p style="color:var(--text2);font-size:.85rem;margin-top:12px">Set the environment variable and run the MCP server directly.</p>
+      <p style="color:var(--text2);font-size:.85rem;margin-top:12px">The MCP server communicates over stdio. Connect it to any MCP-compatible agent.</p>
     </div>
   </div>
 </section>
@@ -253,17 +271,18 @@ npx -y reversesandbox-mcp</pre>
 
 <span class="flow-agent">Agent thinks: I'll search using an x402 search service.</span>
 
-<span class="flow-req">--> GET https://search.reversesandbox.com/search?q=latest+AI+safety+research</span>
+<span class="flow-req">--> GET https://search.reversesandbox.com/web/search?q=latest+AI+safety+research</span>
 <span class="flow-res"><-- 402 Payment Required</span>
-<span class="flow-dim">    {"payTo": "0x5770...", "maxAmountRequired": "0.002", "network": "base"}</span>
+<span class="flow-dim">    Header: payment-required (base64 JSON with accepted payment options)</span>
+<span class="flow-dim">    Accepts: Polygon USDC, Base USDC, Arbitrum USDC, Solana USDC</span>
 
-<span class="flow-agent">Agent thinks: I need to pay. Let me use my ReverseSandbox payment tool.</span>
+<span class="flow-agent">Agent thinks: I need to pay $0.002. Let me use my ReverseSandbox payment tool.</span>
 
-<span class="flow-req">--> pay(to="0x5770...", amount="0.002", network="base")</span>
-<span class="flow-res"><-- Payment signed! Header: X-PAYMENT: eyJhbG...</span>
+<span class="flow-req">--> pay(to="0x5770...", amount="0.002", network="polygon")</span>
+<span class="flow-res"><-- Payment signed! Cost: $0.01, Remaining balance: $9.99</span>
 
-<span class="flow-req">--> GET https://search.reversesandbox.com/search?q=latest+AI+safety+research</span>
-<span class="flow-dim">    X-PAYMENT: eyJhbG...</span>
+<span class="flow-req">--> GET https://search.reversesandbox.com/web/search?q=latest+AI+safety+research</span>
+<span class="flow-dim">    PAYMENT-SIGNATURE: eyJ4NDAy...</span>
 <span class="flow-res"><-- 200 OK — Search results returned</span>
 
 <span class="flow-user">Agent:</span> "Here are the latest AI safety research papers..."
@@ -296,7 +315,12 @@ npx -y reversesandbox-mcp</pre>
     <div class="section-desc">Run this in your terminal to see how x402 works:</div>
     <div class="code-block standalone" style="margin-top:16px">
       <button class="copy-btn" data-copy="try-it">Copy</button>
-      <pre id="code-try-it">curl -s https://search.reversesandbox.com/search?q=hello | head -20</pre>
+      <pre id="code-try-it"># See the 402 response with payment options:
+curl -sI https://search.reversesandbox.com/web/search?q=hello
+
+# Decode the payment-required header:
+curl -s https://search.reversesandbox.com/web/search?q=hello \
+  -o /dev/null -w "%{http_code}" -D -  2>/dev/null | head -20</pre>
     </div>
   </div>
 </section>
