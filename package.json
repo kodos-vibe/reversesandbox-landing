@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^11.7.0",
+    "canonicalize": "^2.1.0",
     "connect-sqlite3": "^0.9.15",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -16,6 +17,7 @@
     "express-rate-limit": "^7.5.0",
     "express-session": "^1.18.1",
     "helmet": "^8.0.0",
+    "jose": "^6.2.2",
     "stripe": "^17.5.0"
   }
 }
