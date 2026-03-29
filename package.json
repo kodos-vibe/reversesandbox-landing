@@ -5,7 +5,9 @@
   "private": true,
   "scripts": {
     "start": "node server.mjs",
-    "dev": "node --watch server.mjs"
+    "dev": "node --watch server.mjs",
+    "test": "node --test test/api-test.mjs",
+    "demo": "bash test/e2e-demo.sh"
   },
   "dependencies": {
     "better-sqlite3": "^11.7.0",
