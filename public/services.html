@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Service Catalog — ReverseSandbox</title>
+<meta name="description" content="Browse available x402 pay-per-use API services on ReverseSandbox. Search, scrape, screenshot and more.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a26;--border:#2a2a3a;--text:#e4e4ef;--text2:#8888a0;--accent:#8b5cf6;--accent2:#a78bfa;--green:#34d399;--orange:#f59e0b;--blue:#60a5fa;--red:#f87171;--code-bg:#0d0d14;--glow:rgba(139,92,246,0.15)}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+code,pre{font-family:'JetBrains Mono',monospace}
+.container{max-width:1080px;margin:0 auto;padding:0 24px}
+section{padding:80px 0}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 0}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-weight:700;font-size:1.1rem;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:8px}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{color:var(--text2);text-decoration:none;font-size:.9rem;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-links .cta-link{display:flex;align-items:center;gap:6px;background:var(--surface2);padding:6px 14px;border-radius:8px;border:1px solid var(--border);font-weight:500;color:var(--text)}
+.nav-links .cta-link:hover{border-color:var(--accent);color:var(--accent2)}
+
+.hero{padding-top:140px;padding-bottom:40px;text-align:center;position:relative}
+.hero::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);pointer-events:none}
+h1{font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-0.03em;line-height:1.1;margin-bottom:16px}
+h1 .highlight{background:linear-gradient(135deg,var(--accent),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero p{font-size:1.1rem;color:var(--text2);max-width:560px;margin:0 auto}
+
+.section-label{font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent2);font-weight:600;margin-bottom:12px}
+
+/* Service cards */
+.services-list{display:flex;flex-direction:column;gap:32px;margin-top:48px}
+.service-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:32px;transition:all .3s}
+.service-card:hover{border-color:var(--accent)}
+.service-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+.service-top h2{font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:10px}
+.service-meta-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.service-price-badge{font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:600;color:var(--green);background:rgba(52,211,153,0.1);padding:5px 14px;border-radius:8px}
+.service-status{display:inline-flex;align-items:center;gap:5px;font-size:.75rem;color:var(--green);background:rgba(52,211,153,0.1);padding:3px 10px;border-radius:99px}
+.service-status .dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.service-desc{color:var(--text2);font-size:.95rem;margin-bottom:20px;line-height:1.6}
+.service-endpoint{font-family:'JetBrains Mono',monospace;font-size:.8rem;color:var(--text2);background:var(--code-bg);padding:6px 12px;border-radius:6px;display:inline-block;margin-bottom:20px}
+.service-networks{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.service-networks span{font-size:.75rem;padding:4px 10px;border-radius:6px;background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
+
+/* Curl example */
+.curl-section{margin-top:4px}
+.curl-label{font-size:.8rem;color:var(--text2);font-weight:600;margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+.code-block{position:relative;background:var(--code-bg);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.code-block pre{padding:16px 20px;overflow-x:auto;font-size:.78rem;line-height:1.6;color:var(--text);margin:0}
+.copy-btn{position:absolute;top:8px;right:8px;padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text2);font-size:.7rem;cursor:pointer;transition:all .2s;font-family:'Inter',system-ui,sans-serif}
+.copy-btn:hover{border-color:var(--accent);color:var(--accent2)}
+.copy-btn.copied{border-color:var(--green);color:var(--green)}
+
+/* CTA */
+.cta{text-align:center;padding:80px 0;position:relative}
+.cta::before{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:500px;height:400px;background:radial-gradient(circle,var(--glow) 0%,transparent 70%);pointer-events:none}
+.cta h2{font-size:1.8rem;font-weight:700;margin-bottom:12px}
+.cta p{color:var(--text2);margin-bottom:24px;font-size:1rem}
+.btn{padding:12px 28px;border-radius:10px;font-size:.95rem;font-weight:600;text-decoration:none;transition:all .2s;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2);transform:translateY(-1px)}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border);margin-left:12px}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent2)}
+
+footer{border-top:1px solid var(--border);padding:32px 0}
+.footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+.footer-logo{font-weight:700;font-size:1rem;color:var(--text)}
+.footer-logo span{color:var(--accent)}
+.footer-links{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.footer-links a{color:var(--text2);text-decoration:none;font-size:.85rem;transition:color .2s}
+.footer-links a:hover{color:var(--accent2)}
+.footer-contact{width:100%;display:flex;gap:32px;flex-wrap:wrap;padding-top:16px;border-top:1px solid var(--border);margin-top:8px}
+.footer-contact-item{font-size:.85rem;color:var(--text2)}
+.footer-contact-item a{color:var(--accent2);text-decoration:none}
+.footer-contact-item a:hover{text-decoration:underline}
+.footer-copy{color:var(--text2);font-size:.8rem;width:100%;text-align:center;margin-top:8px;padding-top:16px;border-top:1px solid var(--border)}
+.footer-security{width:100%;text-align:center;font-size:.78rem;color:var(--text2);margin-top:4px;opacity:.7}
+
+@media(max-width:640px){section{padding:60px 0}.hero{padding-top:120px}.service-top{flex-direction:column;align-items:flex-start}.footer-inner{flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a href="https://www.reversesandbox.com" class="nav-logo"><span>Reverse</span>Sandbox LLC</a>
+    <div class="nav-links">
+      <a href="https://www.reversesandbox.com">Home</a>
+      <a href="/services" style="color:var(--accent2)">Services</a>
+      <a href="/guide">Guide</a>
+      <a href="/dashboard" class="cta-link">Dashboard</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1>Service <span class="highlight">Catalog</span></h1>
+    <p>Pay-per-use x402 API services available for your AI agent. No subscriptions — pay only when your agent uses a service.</p>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="container">
+    <div class="services-list">
+
+      <!-- Web Search -->
+      <div class="service-card">
+        <div class="service-top">
+          <h2>🔎 Web Search</h2>
+          <div class="service-meta-row">
+            <span class="service-price-badge">$0.002 / request</span>
+            <span class="service-status"><span class="dot"></span> Live</span>
+          </div>
+        </div>
+        <p class="service-desc">Search the web in real time from multiple search engines. Returns structured JSON results including titles, URLs, and snippets. Ideal for agents that need to look up current information, research topics, or find relevant web pages.</p>
+        <div class="service-endpoint">GET search.reversesandbox.com/web/search?q={query}</div>
+        <div class="service-networks">
+          <span>Base</span>
+          <span>Polygon</span>
+          <span>Arbitrum</span>
+          <span>Solana</span>
+        </div>
+        <div class="curl-section">
+          <div class="curl-label">Example: x402 payment flow</div>
+          <div class="code-block">
+            <button class="copy-btn" data-copy="search">Copy</button>
+            <pre id="code-search"># 1. Make the request — get 402 with payment requirements
+curl -sI "https://search.reversesandbox.com/web/search?q=latest+news"
+# HTTP/2 402 — Payment Required
+
+# 2. Your agent signs payment via ReverseSandbox MCP tools
+# 3. Retry with payment header
+curl -s "https://search.reversesandbox.com/web/search?q=latest+news" \
+  -H "X-PAYMENT: eyJ4NDAy..."
+# HTTP/2 200 — JSON search results</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Web Scrape -->
+      <div class="service-card">
+        <div class="service-top">
+          <h2>🕸 Web Scrape</h2>
+          <div class="service-meta-row">
+            <span class="service-price-badge">$0.005 / request</span>
+            <span class="service-status"><span class="dot"></span> Live</span>
+          </div>
+        </div>
+        <p class="service-desc">Extract clean, structured content from any web page. Handles JavaScript rendering, bypasses anti-scraping measures, and returns text ready for agent consumption. Great for reading articles, documentation, or any page content.</p>
+        <div class="service-endpoint">GET search.reversesandbox.com/web/scrape?url={url}</div>
+        <div class="service-networks">
+          <span>Base</span>
+          <span>Polygon</span>
+          <span>Arbitrum</span>
+          <span>Solana</span>
+        </div>
+        <div class="curl-section">
+          <div class="curl-label">Example: x402 payment flow</div>
+          <div class="code-block">
+            <button class="copy-btn" data-copy="scrape">Copy</button>
+            <pre id="code-scrape"># 1. Request scrape — get 402 with payment requirements
+curl -sI "https://search.reversesandbox.com/web/scrape?url=https://example.com"
+# HTTP/2 402 — Payment Required
+
+# 2. Your agent signs payment via ReverseSandbox MCP tools
+# 3. Retry with payment header
+curl -s "https://search.reversesandbox.com/web/scrape?url=https://example.com" \
+  -H "X-PAYMENT: eyJ4NDAy..."
+# HTTP/2 200 — Extracted page content</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screenshot -->
+      <div class="service-card">
+        <div class="service-top">
+          <h2>📸 Screenshot</h2>
+          <div class="service-meta-row">
+            <span class="service-price-badge">$0.002 / request</span>
+            <span class="service-status"><span class="dot"></span> Live</span>
+          </div>
+        </div>
+        <p class="service-desc">Capture full-page screenshots of any URL. Returns a rendered image of the webpage. Useful for visual inspection, generating previews, monitoring page changes, or extracting data from visually complex pages.</p>
+        <div class="service-endpoint">GET search.reversesandbox.com/web/screenshot?url={url}</div>
+        <div class="service-networks">
+          <span>Base</span>
+          <span>Polygon</span>
+          <span>Arbitrum</span>
+          <span>Solana</span>
+        </div>
+        <div class="curl-section">
+          <div class="curl-label">Example: x402 payment flow</div>
+          <div class="code-block">
+            <button class="copy-btn" data-copy="screenshot">Copy</button>
+            <pre id="code-screenshot"># 1. Request screenshot — get 402 with payment requirements
+curl -sI "https://search.reversesandbox.com/web/screenshot?url=https://example.com"
+# HTTP/2 402 — Payment Required
+
+# 2. Your agent signs payment via ReverseSandbox MCP tools
+# 3. Retry with payment header
+curl -s "https://search.reversesandbox.com/web/screenshot?url=https://example.com" \
+  -H "X-PAYMENT: eyJ4NDAy..." -o screenshot.png
+# HTTP/2 200 — PNG screenshot saved</pre>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container">
+    <h2>Ready to get started?</h2>
+    <p>Sign up, add funds, and your agent can start using these services in under 2 minutes.</p>
+    <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+    <a href="/guide" class="btn btn-secondary">Setup Guide</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo"><span>Reverse</span>Sandbox LLC</div>
+      <div class="footer-links">
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/refund">Refund Policy</a>
+        <a href="https://providers.reversesandbox.com">For Service Providers</a>
+        <a href="mailto:contact@reversesandbox.com">Contact</a>
+      </div>
+      <div class="footer-contact">
+        <span class="footer-contact-item">Email: <a href="mailto:contact@reversesandbox.com">contact@reversesandbox.com</a></span>
+        <span class="footer-contact-item">REVERSE SANDBOX LLC &middot; 940 NW Fremont St, Camas, WA 98607-9376, USA</span>
+      </div>
+    </div>
+    <div class="footer-security">Payments processed securely via third-party payment processors &middot; No card data stored on our servers &middot; Usage-based billing in USD</div>
+    <div class="footer-copy">&copy; 2026 REVERSE SANDBOX LLC &middot; Enabling the agent economy</div>
+  </div>
+</footer>
+
+<script src="/js/auth.js?v=3"></script>
+<script>
+(function() {
+  document.querySelectorAll('.copy-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var id = 'code-' + btn.dataset.copy;
+      var code = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(code).then(function() {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function() {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

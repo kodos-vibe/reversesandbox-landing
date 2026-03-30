@@ -133,6 +133,19 @@ app.get('/dashboard', (req, res, next) => {
 // Guide page — public, no auth required
 app.get('/guide', (_req, res) => res.sendFile(join(__dirname, 'public', 'guide.html')));
 
+// Services page — public, no auth required
+app.get('/services', (_req, res) => res.sendFile(join(__dirname, 'public', 'services.html')));
+
+// Provider dashboard — require auth if configured
+app.get('/provider/dashboard', (req, res, next) => {
+  if (auth0Configured && (!req.oidc || !req.oidc.isAuthenticated())) {
+    return res.redirect('/login');
+  }
+  next();
+}, (_req, res) => {
+  res.sendFile(join(__dirname, 'public', 'provider-dashboard.html'));
+});
+
 // Clean URL routes for policy pages
 app.get('/terms', (_req, res) => res.sendFile(join(__dirname, 'public', 'terms.html')));
 app.get('/privacy', (_req, res) => res.sendFile(join(__dirname, 'public', 'privacy.html')));

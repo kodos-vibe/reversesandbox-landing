@@ -31,6 +31,13 @@ const server = createServer(async (req, res) => {
   const url = new URL(req.url, `http://${host}`);
   let pathname = url.pathname;
 
+  // Redirect /services and /provider/dashboard to app subdomain
+  if (pathname === "/services" || pathname.startsWith("/provider/")) {
+    res.writeHead(302, { Location: "https://app.reversesandbox.com" + pathname });
+    res.end();
+    return;
+  }
+
   // Route based on hostname
   if (host.startsWith("providers")) {
     // Serve provider landing page (reuse current index.html)
