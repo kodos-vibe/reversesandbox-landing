@@ -40,8 +40,10 @@ app.use(helmet({
 }));
 
 // CSRF: Origin check for state-changing requests
+// Exempt: Auth0 callback (POST from Auth0 origin), Stripe webhooks (POST from Stripe)
+const CSRF_EXEMPT = ['/callback', '/api/webhooks/stripe'];
 app.use((req, res, next) => {
-  if (['POST', 'PUT', 'DELETE'].includes(req.method)) {
+  if (['POST', 'PUT', 'DELETE'].includes(req.method) && !CSRF_EXEMPT.includes(req.path)) {
     const origin = req.get('Origin');
     // Allow: no origin (same-origin), or *.reversesandbox.com
     if (origin && !origin.match(/^https:\/\/([a-z0-9-]+\.)?reversesandbox\.com$/)) {
