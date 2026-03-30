@@ -6,7 +6,7 @@ const router = Router();
 
 router.get('/auth/sync', (req, res) => {
   if (!req.oidc || !req.oidc.isAuthenticated()) {
-    return res.redirect('/');
+    return res.redirect('https://www.reversesandbox.com');
   }
   const { sub, email, name } = req.oidc.user;
   findOrCreateUser(sub, email || '', name || email || '');

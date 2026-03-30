@@ -93,7 +93,7 @@ if (auth0Configured) {
   // Provide stub /api/me so the frontend doesn't break
   app.get('/api/me', (_req, res) => res.json({ authenticated: false }));
   app.get('/login', (_req, res) => res.redirect('/?auth=not-configured'));
-  app.get('/logout', (_req, res) => res.redirect('/'));
+  app.get('/logout', (_req, res) => res.redirect('https://www.reversesandbox.com'));
   app.get('/auth/sync', (_req, res) => res.redirect('/'));
 }
 
@@ -103,7 +103,7 @@ app.use(keyRoutes);
 app.use(payRoutes);
 
 // Home page
-app.get('/', (_req, res) => res.sendFile(join(__dirname, 'public', 'index.html')));
+app.get('/', (_req, res) => res.redirect('https://www.reversesandbox.com'));
 
 // Dashboard — require auth if configured, otherwise show page anyway
 app.get('/dashboard', (req, res, next) => {
@@ -156,7 +156,7 @@ app.use((req, res, next) => {
 
 // Fallback — serve index.html for unmatched routes (SPA-like)
 app.use((_req, res) => {
-  res.status(404).sendFile(join(__dirname, 'public', 'index.html'));
+  res.redirect('https://www.reversesandbox.com');
 });
 
 app.listen(PORT, HOST, () => {
