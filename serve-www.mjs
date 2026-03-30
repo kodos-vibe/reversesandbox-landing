@@ -44,8 +44,15 @@ const server = createServer(async (req, res) => {
     }
   }
 
+  // Early rejection of suspicious paths
+  if (pathname.includes('..') || pathname.split('/').some(s => s.startsWith('.'))) {
+    res.writeHead(403);
+    res.end('Forbidden');
+    return;
+  }
+
   // Security: no path traversal
-  const safePath = join(PUBLIC, pathname.replace(/\.\./g, ""));
+  const safePath = join(PUBLIC, pathname);
   if (!safePath.startsWith(PUBLIC)) {
     res.writeHead(403);
     res.end("Forbidden");

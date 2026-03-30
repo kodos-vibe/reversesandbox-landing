@@ -39,6 +39,18 @@ app.use(helmet({
   },
 }));
 
+// CSRF: Origin check for state-changing requests
+app.use((req, res, next) => {
+  if (['POST', 'PUT', 'DELETE'].includes(req.method)) {
+    const origin = req.get('Origin');
+    // Allow: no origin (same-origin), or *.reversesandbox.com
+    if (origin && !origin.match(/^https:\/\/([a-z0-9-]+\.)?reversesandbox\.com$/)) {
+      return res.status(403).json({ error: 'Forbidden: invalid origin' });
+    }
+  }
+  next();
+});
+
 // Stripe webhook needs raw body — mount BEFORE json parser
 app.use('/api/webhooks/stripe', express.raw({ type: 'application/json' }));
 app.use(webhookRoutes);
@@ -72,6 +84,7 @@ if (auth0Configured) {
       callback: '/callback',
       logout: '/logout',
       login: '/login',
+      postLogoutRedirect: 'https://www.reversesandbox.com',
     },
     // Controls the OIDC state's returnTo — this is what the library actually
     // uses for the post-callback redirect (NOT session.returnTo).
