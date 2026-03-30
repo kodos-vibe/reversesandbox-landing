@@ -397,15 +397,41 @@ nav .container{display:flex;align-items:center;justify-content:space-between}
         data.keys.forEach(k => {
           const tr = document.createElement('tr');
           const statusCls = k.status === 'active' ? 'active' : 'revoked';
-          const revokeCell = k.status === 'active'
-            ? '<button class="revoke-btn" data-id="' + k.id + '">Revoke</button>'
-            : '';
-          tr.innerHTML = '<td class="key-prefix">' + k.key_prefix + '...</td>'
-            + '<td>' + (k.name || 'Default') + '</td>'
-            + '<td><span class="key-status ' + statusCls + '">' + k.status + '</span></td>'
-            + '<td>' + fmtDate(k.created_at) + '</td>'
-            + '<td>' + (k.last_used_at ? fmtTime(k.last_used_at) : 'Never') + '</td>'
-            + '<td>' + revokeCell + '</td>';
+
+          const tdPrefix = document.createElement('td');
+          tdPrefix.className = 'key-prefix';
+          tdPrefix.textContent = k.key_prefix + '...';
+
+          const tdName = document.createElement('td');
+          tdName.textContent = k.name || 'Default';
+
+          const tdStatus = document.createElement('td');
+          const statusSpan = document.createElement('span');
+          statusSpan.className = 'key-status ' + statusCls;
+          statusSpan.textContent = k.status;
+          tdStatus.appendChild(statusSpan);
+
+          const tdCreated = document.createElement('td');
+          tdCreated.textContent = fmtDate(k.created_at);
+
+          const tdUsed = document.createElement('td');
+          tdUsed.textContent = k.last_used_at ? fmtTime(k.last_used_at) : 'Never';
+
+          const tdAction = document.createElement('td');
+          if (k.status === 'active') {
+            const revokeBtn = document.createElement('button');
+            revokeBtn.className = 'revoke-btn';
+            revokeBtn.dataset.id = k.id;
+            revokeBtn.textContent = 'Revoke';
+            tdAction.appendChild(revokeBtn);
+          }
+
+          tr.appendChild(tdPrefix);
+          tr.appendChild(tdName);
+          tr.appendChild(tdStatus);
+          tr.appendChild(tdCreated);
+          tr.appendChild(tdUsed);
+          tr.appendChild(tdAction);
           tbody.appendChild(tr);
         });
         // Bind revoke buttons

@@ -60,7 +60,14 @@ if (auth0Configured) {
     clientID: process.env.AUTH0_CLIENT_ID,
     clientSecret: process.env.AUTH0_CLIENT_SECRET,
     issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
-    secret: process.env.SESSION_SECRET || 'dev-secret-change-me-in-production',
+    secret: (() => {
+      const sessionSecret = process.env.SESSION_SECRET;
+      if (!sessionSecret) {
+        console.error('FATAL: SESSION_SECRET must be set');
+        process.exit(1);
+      }
+      return sessionSecret;
+    })(),
     routes: {
       callback: '/callback',
       logout: '/logout',

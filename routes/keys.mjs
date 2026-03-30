@@ -10,7 +10,7 @@ router.post('/api/keys', requireAuth, (req, res) => {
   const dbUser = getUserByAuth0Sub(sub);
   if (!dbUser) return res.status(404).json({ error: 'User not found' });
 
-  const name = (req.body.name || 'Default').slice(0, 64);
+  const name = (req.body.name || 'Default').slice(0, 64).replace(/[<>&"']/g, '');
 
   // Limit to 5 active keys per user
   const existing = listApiKeys(dbUser.id);

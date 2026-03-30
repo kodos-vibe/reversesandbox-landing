@@ -7,11 +7,21 @@
  */
 
 import { Router } from 'express';
+import rateLimit from 'express-rate-limit';
 import { apiKeyAuth } from '../middleware/apiKeyAuth.mjs';
-import { deductBalance, logUsage, getUsage, getUserById } from '../lib/db.mjs';
+import { atomicDeduct, addBalance, logUsage, getUsage, getUserById } from '../lib/db.mjs';
 import { signPayment, buildX402PaymentHeader, init as initCustody } from '../lib/custody.mjs';
 
 const router = Router();
+
+const payLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  keyGenerator: (req) => req.apiKeyId || req.ip,
+  message: { error: 'Rate limit exceeded. Max 10 payments per minute.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // All routes require API key auth
 router.use('/api/pay', apiKeyAuth);
@@ -20,7 +30,7 @@ router.use('/api/usage', apiKeyAuth);
 
 // ── POST /api/pay ────────────────────────────────────────────────────
 
-router.post('/api/pay', async (req, res) => {
+router.post('/api/pay', payLimiter, async (req, res) => {
   // Check custody is configured
   if (!initCustody()) {
     return res.status(503).json({ error: 'Payment signing not configured' });
@@ -41,20 +51,20 @@ router.post('/api/pay', async (req, res) => {
     return res.status(400).json({ error: 'Amount must be a positive number' });
   }
 
-  // Balance check: user must have at least 1 cent
-  const user = getUserById(req.apiUser.id);
-  if (!user || user.balance <= 0) {
-    return res.status(402).json({ error: 'Insufficient balance. Please add funds.' });
+  if (parsedAmount > 100) {
+    return res.status(400).json({ error: 'Amount exceeds maximum ($100)' });
   }
 
   // Cost: at least 1 cent per call (MVP — sub-cent x402 prices round up)
   const costCents = Math.max(1, Math.round(parsedAmount * 100));
 
-  if (user.balance < costCents) {
+  // Atomic deduct (prevents race condition)
+  if (!atomicDeduct(req.apiUser.id, costCents)) {
+    const user = getUserById(req.apiUser.id);
     return res.status(402).json({
       error: 'Insufficient balance',
       required_cents: costCents,
-      balance_cents: user.balance,
+      balance_cents: user ? user.balance : 0,
     });
   }
 
@@ -92,8 +102,7 @@ router.post('/api/pay', async (req, res) => {
 
     const paymentHeader = buildX402PaymentHeader(signResult, acceptedRequirements);
 
-    // Deduct cost and log usage
-    deductBalance(req.apiUser.id, costCents);
+    // Log usage (balance already deducted atomically above)
     logUsage(req.apiUser.id, req.apiKeyId, {
       service: 'x402_pay',
       paymentTo: to,
@@ -112,8 +121,10 @@ router.post('/api/pay', async (req, res) => {
       remaining_balance_cents: updatedUser.balance,
     });
   } catch (err) {
-    console.error('[pay] signing error:', err.message);
-    res.status(500).json({ error: 'Payment signing failed', details: err.message });
+    // Refund on failure
+    addBalance(req.apiUser.id, costCents);
+    console.error('[pay] signing error:', err);
+    res.status(500).json({ error: 'Payment signing failed' });
   }
 });
 

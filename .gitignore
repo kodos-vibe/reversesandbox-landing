@@ -4,3 +4,4 @@ db/*.db
 db/*.db-journal
 db/*.db-wal
 *.log
+custody-keys/
