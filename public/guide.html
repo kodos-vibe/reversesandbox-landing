@@ -165,8 +165,8 @@ footer{border-top:1px solid var(--border);padding:32px 0}
         <pre id="code-claude-desktop">{
   "mcpServers": {
     "reversesandbox": {
-      "command": "node",
-      "args": ["/path/to/reversesandbox-mcp/index.mjs"],
+      "command": "npx",
+      "args": ["-y", "@reverse_sandbox/mcp"],
       "env": {
         "RS_API_KEY": "your-api-key-here"
       }
@@ -175,33 +175,34 @@ footer{border-top:1px solid var(--border);padding:32px 0}
 }</pre>
       </div>
       <p style="color:var(--text2);font-size:.85rem;margin-top:12px">
-        First, clone the repo: <code>git clone https://github.com/kodos-vibe/reversesandbox-mcp.git &amp;&amp; cd reversesandbox-mcp &amp;&amp; npm install</code><br>
-        Then add the above to your <code>claude_desktop_config.json</code>, replacing the path with where you cloned it.
+        Add the above to your <code>claude_desktop_config.json</code>. No installation needed &mdash; npx downloads the package automatically.
       </p>
     </div>
 
     <div class="tab-panel" id="tab-claude-code">
       <div class="code-block">
         <button class="copy-btn" data-copy="claude-code">Copy</button>
-        <pre id="code-claude-code"># Add to your project's .mcp.json (or ~/.claude.json under projects):
+        <pre id="code-claude-code"># One-liner setup:
+claude mcp add reversesandbox -- npx -y @reverse_sandbox/mcp
+
+# Then set your API key:
+export RS_API_KEY="your-api-key-here"
+
+# Or add to .mcp.json manually:
 {
   "mcpServers": {
     "reversesandbox": {
       "type": "stdio",
-      "command": "node",
-      "args": ["/path/to/reversesandbox-mcp/index.mjs"],
+      "command": "npx",
+      "args": ["-y", "@reverse_sandbox/mcp"],
       "env": {
         "RS_API_KEY": "your-api-key-here"
       }
     }
   }
-}
-
-# Install from GitHub:
-git clone https://github.com/kodos-vibe/reversesandbox-mcp.git
-cd reversesandbox-mcp &amp;&amp; npm install</pre>
+}</pre>
       </div>
-      <p style="color:var(--text2);font-size:.85rem;margin-top:12px">Set the <code>args</code> path to where you cloned the repo. Restart Claude Code after adding.</p>
+      <p style="color:var(--text2);font-size:.85rem;margin-top:12px">Restart Claude Code after adding. The package is downloaded automatically via npx.</p>
     </div>
 
     <div class="tab-panel" id="tab-openclaw">
@@ -210,8 +211,8 @@ cd reversesandbox-mcp &amp;&amp; npm install</pre>
         <pre id="code-openclaw">{
   "mcpServers": {
     "reversesandbox": {
-      "command": "node",
-      "args": ["/path/to/reversesandbox-mcp/index.mjs"],
+      "command": "npx",
+      "args": ["-y", "@reverse_sandbox/mcp"],
       "env": {
         "RS_API_KEY": "your-api-key-here"
       }
@@ -220,20 +221,19 @@ cd reversesandbox-mcp &amp;&amp; npm install</pre>
 }</pre>
       </div>
       <p style="color:var(--text2);font-size:.85rem;margin-top:12px">
-        First, clone the repo: <code>git clone https://github.com/kodos-vibe/reversesandbox-mcp.git &amp;&amp; cd reversesandbox-mcp &amp;&amp; npm install</code><br>
-        Then add the above to your <code>.mcp.json</code> in your project root, replacing the path.
+        Add the above to your <code>.mcp.json</code> in your project root. No manual installation needed.
       </p>
     </div>
 
     <div class="tab-panel" id="tab-generic">
       <div class="code-block">
         <button class="copy-btn" data-copy="generic">Copy</button>
-        <pre id="code-generic"># Install from GitHub
-git clone https://github.com/kodos-vibe/reversesandbox-mcp.git
-cd reversesandbox-mcp &amp;&amp; npm install
+        <pre id="code-generic"># Run directly with npx (no install needed):
+RS_API_KEY="your-api-key-here" npx -y @reverse_sandbox/mcp
 
-# Run with your API key
-RS_API_KEY="your-api-key-here" node index.mjs</pre>
+# Or install globally:
+npm install -g @reverse_sandbox/mcp
+RS_API_KEY="your-api-key-here" reversesandbox-mcp</pre>
       </div>
       <p style="color:var(--text2);font-size:.85rem;margin-top:12px">The MCP server communicates over stdio. Connect it to any MCP-compatible agent.</p>
     </div>
